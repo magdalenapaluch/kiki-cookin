@@ -218,3 +218,32 @@ details[open] .detailsSummary::before {
   background: var(--color-primary);
   color: white;
 }
+
+@media (max-width: 520px) {
+  .body {
+    padding: 12px;
+    gap: 6px;
+  }
+
+  .title {
+    font-size: 0.92rem;
+    line-height: 1.25;
+  }
+
+  .recipeLink {
+    font-size: 0.72rem;
+  }
+
+  .selectBar {
+    padding: 8px 10px;
+    font-size: 0.72rem;
+  }
+
+  .checkmark {
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+}
