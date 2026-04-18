@@ -120,17 +120,112 @@ function includesAny(text: string, candidates: string[]): boolean {
   return candidates.some((candidate) => text.includes(candidate));
 }
 
-const SPICES_CONDIMENTS_KEYWORDS = ["prosz", "papryka mielona", "papryka slodka", "papryka wedzon", "pieprz", "cukier", "ocet", "kmin", "majeranek", "laurow", "sol", "cynamon", "oregano", "bazyli", "tymianek", "wanilinow", "curry", "kurkum", "chili", "imbir", "czosnek granul", "musztard", "pistac"];
+const SPICES_CONDIMENTS_KEYWORDS = ["prosz", "papryka mielona", "papryka slodka", "papryka wedzon", "pieprz", "cukier", "ocet", "kmin", "majeranek", "laurow", "sol", "cynamon", "oregano", "bazyli", "tymianek", "wanilinow", "curry", "kurkum", "chili", "imbir", "czosnek granul", "musztard", "spice", "season", "vinegar", "sugar", "salt", "pepper", "mustard", "cinnamon", "ginger", "turmeric", "garlic powder", "fuszer", "ecet", "bazsalikom", "kakukkf", "fah", "mustar", "orolt paprika", "edes paprika", "fustolt paprika"];
 
-const CANNED_DRY_KEYWORDS = ["puszce", "fasola", "dzem", "ryz", "passata", "sucha bulka", "woda", "kasz", "soczew", "ciecierzyc", "groch", "quinoa", "nutella", "kuskus", "bulgur", "platki", "orzech", "pestk", "nasion", "kakao"];
+const CANNED_DRY_KEYWORDS = ["puszce", "fasola", "dzem", "ryz", "passata", "sucha bulka", "woda", "kasz", "soczew", "ciecierzyc", "groch", "quinoa", "nutella", "kuskus", "bulgur", "platki", "orzech", "pistac", "pestk", "nasion", "kakao", "canned", "beans", "jam", "rice", "water", "lentil", "chickpea", "pea", "oat", "flakes", "nuts", "nut", "seed", "seeds", "hazelnut", "almond", "pistach", "bab", "lekvar", "rizs", "lencs", "csicseri", "borso", "zab", "dio", "mandula", "pisztacia", "mag"];
 
-const PRODUCE_KEYWORDS = ["cebul", "papryk", "pomidor", "ziemniak", "czosn", "cukini", "kukurydz", "kapust", "ogor", "seler", "owoc", "owoce", "jablk", "banan", "truskawk", "malin", "borowk", "jagod", "winogron", "cytryn", "limonk", "pomarancz", "gruszk", "brzoskwin", "kiwi", "mango", "salat", "rukol", "szpinak", "por", "brokul", "kalafior", "baklazan", "rzodkiew", "pieczark", "pietruszk", "koper", "szczypior"];
+const PRODUCE_KEYWORDS = [
+  "cebul",
+  "papryk",
+  "pomidor",
+  "ziemniak",
+  "czosn",
+  "cukini",
+  "kukurydz",
+  "kapust",
+  "ogor",
+  "seler",
+  "owoc",
+  "owoce",
+  "jablk",
+  "banan",
+  "truskawk",
+  "malin",
+  "borowk",
+  "jagod",
+  "winogron",
+  "cytryn",
+  "limonk",
+  "pomarancz",
+  "gruszk",
+  "brzoskwin",
+  "kiwi",
+  "mango",
+  "salat",
+  "rukol",
+  "szpinak",
+  "por",
+  "brokul",
+  "kalafior",
+  "baklazan",
+  "rzodkiew",
+  "pieczark",
+  "pietruszk",
+  "koper",
+  "szczypior",
+  "onion",
+  "tomato",
+  "potato",
+  "garlic",
+  "zucchini",
+  "corn",
+  "cabbage",
+  "cucumber",
+  "celery",
+  "fruit",
+  "apple",
+  "strawberr",
+  "raspberr",
+  "blueberr",
+  "grape",
+  "lemon",
+  "lime",
+  "orange",
+  "pear",
+  "peach",
+  "lettuce",
+  "arugula",
+  "spinach",
+  "leek",
+  "broccoli",
+  "cauliflower",
+  "eggplant",
+  "radish",
+  "mushroom",
+  "parsley",
+  "dill",
+  "chive",
+  "hagyma",
+  "paradicsom",
+  "burgony",
+  "fokhagy",
+  "cukkini",
+  "kukorica",
+  "ubork",
+  "zeller",
+  "gyumolcs",
+  "alma",
+  "eper",
+  "szolo",
+  "citrom",
+  "narancs",
+  "korte",
+  "barack",
+  "salata",
+  "spenot",
+  "brokkoli",
+  "karfiol",
+  "retek",
+  "gomba",
+  "petrezs",
+  "kapor",
+];
 
-const DAIRY_EGGS_KEYWORDS = ["mleko", "jaj", "smietan", "jogurt", "ser", "twarog", "maslo", "tejszin", "smieta", "kefir", "mozzarella", "feta", "parmezan", "mascarpone"];
+const DAIRY_EGGS_KEYWORDS = ["mleko", "jaj", "smietan", "jogurt", "ser", "twarog", "maslo", "tejszin", "smieta", "kefir", "mozzarella", "feta", "parmezan", "mascarpone", "milk", "egg", "cream", "yogurt", "cheese", "butter", "parmesan", "quark", "cottage cheese", "tej", "tojas", "sajt", "vaj", "tejfol", "turo", "drozdze", "yeast", "eleszto"];
 
-const MEAT_FISH_KEYWORDS = ["mieso", "kurczak", "boczek", "lopatka", "smalec", "bekon", "szynka", "kielbasa", "ryba", "losos", "dorsz", "tunczyk", "krewetk", "indyk", "wolow", "wieprzow", "cielec", "baran", "jagniec", "golec", "pasztet"];
+const MEAT_FISH_KEYWORDS = ["mieso", "kurczak", "boczek", "lopatka", "smalec", "bekon", "szynka", "kielbasa", "ryba", "losos", "dorsz", "tunczyk", "krewetk", "indyk", "wolow", "wieprzow", "cielec", "baran", "jagniec", "golec", "pasztet", "meat", "chicken", "bacon", "ham", "sausage", "fish", "salmon", "cod", "tuna", "shrimp", "turkey", "beef", "pork", "veal", "lamb", "pate", "hus", "csirke", "szalonna", "sonka", "kolbasz", "hal", "lazac", "tonhal", "garnel", "pulyka", "marha", "sertes", "borju", "bari"];
 
-const GRAINS_BAKERY_KEYWORDS = ["maka", "makaron", "bulk", "tortill", "pita", "ciast", "skrobia", "drozdze", "bread", "chleb", "bagiet", "buleczk", "tortellini", "gnocchi"];
+const GRAINS_BAKERY_KEYWORDS = ["maka", "makaron", "bulk", "tortill", "pita", "ciast", "skrobia", "bread", "chleb", "bagiet", "buleczk", "tortellini", "gnocchi", "flour", "pasta", "bun", "dough", "starch", "pastry", "liszt", "teszta", "kenyer", "zsoml", "kelt"];
 
 export function getIngredientCategory(name: string): CategoryKey {
   const n = normalizeForMatch(name);
