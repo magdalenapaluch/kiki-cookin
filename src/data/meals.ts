@@ -29,6 +29,7 @@ export interface AggregatedIngredient {
   quantity: number;
   unit: string;
   optional: boolean;
+  mealIds: string[];
 }
 
 export function aggregateIngredients(meals: Meal[]): AggregatedIngredient[] {
@@ -42,12 +43,14 @@ export function aggregateIngredients(meals: Meal[]): AggregatedIngredient[] {
       if (existing) {
         existing.quantity += quantity;
         if (!ing.optional) existing.optional = false;
+        if (!existing.mealIds.includes(meal.id)) existing.mealIds.push(meal.id);
       } else {
         map.set(key, {
           name: ing.name,
           quantity,
           unit,
           optional: ing.optional ?? false,
+          mealIds: [meal.id],
         });
       }
     }
@@ -117,7 +120,7 @@ function includesAny(text: string, candidates: string[]): boolean {
   return candidates.some((candidate) => text.includes(candidate));
 }
 
-const SPICES_CONDIMENTS_KEYWORDS = ["papryka w proszku", "papryka mielona", "pieprz", "cukier", "ocet", "kmin", "majeranek", "lisc", "laurow", "sol", "cynamon", "oregano", "bazylia", "tymianek", "wanilinow"];
+const SPICES_CONDIMENTS_KEYWORDS = ["papryka w proszku", "papryka mielona", "pieprz", "cukier", "ocet", "kmin", "majeranek", "laurow", "sol", "cynamon", "oregano", "bazylia", "tymianek", "wanilinow"];
 
 const CANNED_DRY_KEYWORDS = ["puszce", "fasola", "dzem", "ryz", "passata", "sucha bulka", "woda"];
 

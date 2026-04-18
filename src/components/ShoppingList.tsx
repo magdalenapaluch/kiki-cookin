@@ -31,10 +31,12 @@ interface DisplayIngredient {
   unit: string;
   optional: boolean;
   isCustom?: boolean;
+  mealIds?: string[];
 }
 
+const MEAL_COLORS = ["#f97316", "#8b5cf6", "#10b981", "#3b82f6", "#f43f5e", "#eab308", "#06b6d4", "#ec4899"];
+
 export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll }: Props) {
-  // Use lazy initializer to load from localStorage synchronously on first render
   const [checkedItems, setCheckedItems] = useState<Set<string>>(() => {
     try {
       const saved = localStorage.getItem("shoppingListChecked");
@@ -54,6 +56,13 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
     }
   });
   const [newItemName, setNewItemName] = useState("");
+  const [focusedMealId, setFocusedMealId] = useState<string | null>(null);
+
+  const activeFocusedMealId = focusedMealId && selectedMeals.some((m) => m.id === focusedMealId) ? focusedMealId : null;
+
+  const toggleFocusMeal = (mealId: string) => {
+    setFocusedMealId((prev) => (prev === mealId ? null : mealId));
+  };
 
   // Save checked items to localStorage whenever they change
   useEffect(() => {
@@ -123,12 +132,15 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
     setCheckedItems(new Set());
   };
 
+  const mealColorMap = new Map<string, string>(selectedMeals.map((meal, i) => [meal.id, MEAL_COLORS[i % MEAL_COLORS.length]]));
+
   const mealIngredients: DisplayIngredient[] = aggregateIngredients(selectedMeals).map((ing) => ({
     key: `meal__${ing.name.toLowerCase()}__${ing.unit}`,
     name: ing.name,
     quantity: ing.quantity,
     unit: ing.unit,
     optional: ing.optional,
+    mealIds: ing.mealIds,
   }));
   const customIngredients: DisplayIngredient[] = customItems.map((item) => ({
     key: `custom__${item.id}`,
@@ -139,8 +151,6 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
     isCustom: true,
   }));
   const ingredients: DisplayIngredient[] = [...mealIngredients, ...customIngredients];
-  const required = ingredients.filter((i) => !i.optional);
-  const optional = ingredients.filter((i) => i.optional);
 
   const byCategory = new Map<CategoryKey, DisplayIngredient[]>();
   for (const category of CATEGORY_ORDER) {
@@ -156,7 +166,7 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
       <div className={styles.headingRow}>
         <h2 className={styles.heading}>Shopping List</h2>
         <div className={styles.headerButtons}>
-          {selectedMeals.length > 0 && (
+          {(selectedMeals.length > 0 || customItems.length > 0) && (
             <button className={styles.clearBtn} onClick={handleClearAll} title="Clear all meals">
               Clear
             </button>
@@ -167,9 +177,19 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
         </div>
       </div>
 
-      <p className={styles.count}>
-        {required.length} items{optional.length > 0 ? ` + ${optional.length} optional` : ""}
-      </p>
+      {selectedMeals.length > 0 && (
+        <div className={styles.mealLegend}>
+          {selectedMeals.map((meal) => {
+            const color = mealColorMap.get(meal.id)!;
+            const isActive = activeFocusedMealId === meal.id;
+            return (
+              <button key={meal.id} className={`${styles.mealTag} ${isActive ? styles.mealTagActive : ""}`} style={{ "--tag-color": color } as React.CSSProperties} onClick={() => toggleFocusMeal(meal.id)} aria-pressed={isActive}>
+                {meal.name}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       <form className={styles.customForm} onSubmit={addCustomItem}>
         <input className={styles.customName} placeholder="Add custom item" value={newItemName} onChange={(e) => setNewItemName(e.target.value)} aria-label="Custom item name" />
@@ -196,8 +216,11 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
               <ul className={styles.list}>
                 {items.map((ing, i) => {
                   const isChecked = checkedItems.has(ing.key);
+                  const isHighlighted = activeFocusedMealId !== null && (ing.mealIds?.includes(activeFocusedMealId) ?? false);
+                  const isDimmed = activeFocusedMealId !== null && !isHighlighted && !ing.isCustom;
+                  const highlightColor = isHighlighted ? mealColorMap.get(activeFocusedMealId!) : undefined;
                   return (
-                    <li key={`${category}-${ing.key}-${i}`} className={`${styles.item} ${ing.optional ? styles.optionalItem : ""} ${isChecked ? styles.checked : ""}`}>
+                    <li key={`${category}-${ing.key}-${i}`} className={`${styles.item} ${ing.optional ? styles.optionalItem : ""} ${isChecked ? styles.checked : ""} ${isHighlighted ? styles.itemHighlighted : ""} ${isDimmed ? styles.itemDimmed : ""}`} style={isHighlighted ? ({ "--item-accent": highlightColor } as React.CSSProperties) : undefined}>
                       <button className={styles.checkbox} onClick={() => toggleItem(ing.key)} aria-label={`Toggle ${ing.name}`} aria-pressed={isChecked}>
                         {isChecked && "✓"}
                       </button>
@@ -218,16 +241,15 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
                           {ing.optional && <span className={styles.optionalInline}>optional</span>}
                         </span>
                       </span>
-                      <span className={styles.itemQty}>
-                        {formatQuantity(ing.quantity)}
-                        {ing.unit && ` ${ing.unit}`}
-                      </span>
                       {ing.isCustom ? (
                         <button className={styles.removeBtn} onClick={() => removeCustomItem(ing.key.replace("custom__", ""))} aria-label={`Remove ${ing.name}`}>
                           ✕
                         </button>
                       ) : (
-                        <span className={styles.itemActionPlaceholder} aria-hidden="true" />
+                        <span className={styles.itemQty}>
+                          {formatQuantity(ing.quantity)}
+                          {ing.unit && ` ${ing.unit}`}
+                        </span>
                       )}
                     </li>
                   );

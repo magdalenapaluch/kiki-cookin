@@ -2,7 +2,7 @@
   background: var(--color-surface);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 24px;
+  padding: 24px 15px;
   margin-top: 42px;
   position: sticky;
   top: 88px;
@@ -159,6 +159,40 @@
   margin-bottom: 12px;
 }
 
+.mealLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.mealTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1.5px solid var(--tag-color);
+  background: color-mix(in srgb, var(--tag-color) 12%, transparent);
+  color: color-mix(in srgb, var(--tag-color) 75%, #000);
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+  white-space: nowrap;
+}
+
+.mealTag:hover {
+  background: color-mix(in srgb, var(--tag-color) 22%, transparent);
+}
+
+.mealTagActive {
+  background: color-mix(in srgb, var(--tag-color) 22%, transparent);
+  box-shadow: 0 0 0 1.5px var(--tag-color);
+}
+
 .customForm {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -226,12 +260,22 @@
 
 .item {
   display: grid;
-  grid-template-columns: 20px 1fr auto 22px;
+  grid-template-columns: 20px 1fr auto;
   align-items: center;
   gap: 8px;
-  padding: 7px 0;
+  padding: 7px 8px;
   border-bottom: 1px solid var(--color-border);
   font-size: 0.85rem;
+}
+
+.item.itemHighlighted {
+  box-shadow: inset 3px 0 0 var(--item-accent);
+  background: color-mix(in srgb, var(--item-accent) 9%, transparent);
+  border-radius: 4px;
+}
+
+.item.itemDimmed {
+  opacity: 0.28;
 }
 
 .item:last-child {
@@ -311,6 +355,7 @@
   font-weight: 600;
   color: var(--color-primary);
   white-space: nowrap;
+  justify-self: end;
 }
 
 .removeBtn {
@@ -323,16 +368,12 @@
   cursor: pointer;
   line-height: 1;
   padding: 0;
+  justify-self: end;
 }
 
 .removeBtn:hover {
   color: #b91c1c;
   background: #fee2e2;
-}
-
-.itemActionPlaceholder {
-  width: 20px;
-  height: 20px;
 }
 
 .optionalInline {
@@ -365,4 +406,69 @@
 .optionalItem .itemName {
   font-weight: 400;
   font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .item {
+    gap: 10px;
+    padding: 0;
+    font-size: 0.92rem;
+  }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    font-size: 0.92rem;
+  }
+
+  .itemName {
+    padding: 12px 0;
+    margin: -3px 0;
+  }
+
+  .itemQty {
+    font-size: 0.84rem;
+  }
+
+  .removeBtn {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .clearBtn:hover {
+    opacity: 0.45;
+    color: #111;
+    border-color: transparent;
+    background: none;
+  }
+
+  .closeBtn:hover {
+    color: var(--color-text-muted);
+    background: none;
+  }
+
+  .mealTag:hover {
+    background: color-mix(in srgb, var(--tag-color) 12%, transparent);
+  }
+
+  .customAddBtn:hover {
+    filter: none;
+  }
+
+  .checkbox:hover {
+    border-color: var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .itemName:hover {
+    background: transparent;
+  }
+
+  .removeBtn:hover {
+    color: var(--color-text-muted);
+    background: none;
+  }
 }
