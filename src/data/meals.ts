@@ -208,7 +208,7 @@ export const meals: Meal[] = [
     imageUrl: "https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=480&q=80",
     recipeUrl: "https://www.196flavors.com/romania-varza-a-la-cluj/",
     ingredients: [
-      { name: "Łopatka wieprzowa (pork shoulder)", quantity: 700, unit: "g" },
+      { name: "Łopatka wieprzowa (pork shoulder)", quantity: 700, unit: "g" },``
       { name: "Czosnek (garlic)", quantity: 2, unit: "ząbki" },
       { name: "Cebula (onion)", quantity: 1, unit: "szt" },
       { name: "Kmin (caraway)", quantity: 1, unit: "łyżeczka" },
