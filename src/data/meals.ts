@@ -13,6 +13,7 @@ export interface Meal {
   imageUrl: string;
   recipeUrl?: string;
   content?: string;
+  kind?: "lunch" | "idea";
   ingredients: Ingredient[];
 }
 
@@ -149,7 +150,7 @@ export const meals: Meal[] = [
       { name: "Jajka (eggs)", quantity: 2, unit: "szt" },
       { name: "Mąka (flour)", quantity: 500, unit: "g" },
       { name: "Dżem (jam)", quantity: 1, unit: "op", optional: true },
-      { name: "Twaróg (quark / cottage cheese)", quantity: 1, unit: "op", optional: true },
+      { name: "Twaróg (quark/cottage cheese)", quantity: 1, unit: "op", optional: true },
       { name: "Jogurt naturalny (plain yogurt)", quantity: 200, unit: "ml", optional: true },
     ],
   },
@@ -227,7 +228,7 @@ export const meals: Meal[] = [
       { name: "Czosnek (garlic)", quantity: 2, unit: "ząbki" },
       { name: "Cebula (onion)", quantity: 1, unit: "szt" },
       { name: "Papryka mielona (ground paprika)", quantity: 2, unit: "łyżeczka" },
-      { name: "Kminek mielony (ground caraway)", quantity: 1, unit: "łyżeczka" },
+      { name: "Kminek mielony (ground caraway)", quantity: 2, unit: "g" },
       { name: "Papryka (bell pepper)", quantity: 2, unit: "szt" },
       { name: "Pomidor (tomato)", quantity: 1, unit: "szt" },
       { name: "Kapusta kiszona (sauerkraut)", quantity: 800, unit: "g" },
@@ -301,6 +302,85 @@ export const meals: Meal[] = [
       { name: "Ser żółty (yellow cheese)", quantity: 1, unit: "op", optional: true, note: "cheap cheese tarty / grated" },
       { name: "Ser góralski (smoked cheese)", quantity: 1, unit: "op", optional: true },
       { name: "Żurawina (cranberries)", quantity: 1, unit: "op", optional: true },
+    ],
+  },
+  {
+    id: "idea-cereals-milk",
+    name: "Cereals and milk",
+    description: "Quick breakfast or dinner",
+    imageUrl: "https://i.imgur.com/s7JefS2.jpg",
+    kind: "idea",
+    ingredients: [
+      { name: "Płatki Yellow", quantity: 1, unit: "op" },
+      { name: "Płatki Cinni Minis", quantity: 1, unit: "op", optional: true },
+      { name: "Mleko (milk)", quantity: 500, unit: "ml" },
+    ],
+  },
+  {
+    id: "idea-sandwiches",
+    name: "Sandwiches",
+    description: "Quick breakfast or dinner",
+    imageUrl: "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/grzanki-z-jajecznica-grzybami-oliwa-truflowa.jpg",
+    kind: "idea",
+    ingredients: [
+      { name: "Cheddar", quantity: 1, unit: "op" },
+      { name: "Chleb (bread)", quantity: 0.2, unit: "op" },
+      { name: "Szynka (ham)", quantity: 1, unit: "op" },
+      { name: "Kiełbasa (sausage)", quantity: 1, unit: "op", optional: true },
+      { name: "Masło (butter)", quantity: 20, unit: "g" },
+      { name: "Pomidor (tomato)", quantity: 2, unit: "szt" },
+      { name: "Kiełki (sprouts)", quantity: 1, unit: "op" },
+    ],
+  },
+  {
+    id: "idea-korozott",
+    name: "Körözött",
+    description: "Węgierska pasta z twarogu do pieczywa i warzyw",
+    imageUrl: "https://cdn.mindmegette.hu/2024/04/df1VYJqQYwcvqAHTp0Sy7yJLZeFhjb03V343Z7krT1E/fill/0/0/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50Lzk1ZmQzMjZhZTBiMjQ0ODA5YTY3ZjE1ZDA2ZjViMTcw.webp",
+    recipeUrl: "https://www.mindmegette.hu/recept/hazi-korozott-egyszeruen",
+    content: "Na początku rozgnieć twaróg w misce widelcem lub tłuczkiem do ziemniaków. Dodaj masło w temperaturze pokojowej oraz śmietanę i dokładnie wymieszaj.\n\nObierz czerwoną cebulę i zetrzyj ją do masy twarogowej. Dodaj kminek mielony, paprykę mieloną oraz sól, następnie wszystko starannie połącz.\n\nGotową pastę odstaw do lodówki na kilka godzin, żeby smaki się przegryzły.\n\nPodawaj schłodzony körözött posypany świeżą pietruszką, najlepiej z pieczywem i świeżymi warzywami.",
+    kind: "idea",
+    ingredients: [
+      { name: "Twaróg (quark/cottage cheese)", quantity: 1, unit: "op" },
+      { name: "Masło (butter)", quantity: 50, unit: "g" },
+      { name: "Śmietana (sour cream)", quantity: 100, unit: "ml" },
+      { name: "Czerwona cebula (red onion)", quantity: 1, unit: "szt" },
+      { name: "Kminek mielony (ground caraway)", quantity: 1, unit: "g" },
+      { name: "Papryka mielona (ground paprika)", quantity: 1, unit: "łyżka" },
+      { name: "Sól (salt)", quantity: 2, unit: "g" },
+      { name: "Pietruszka (parsley)", quantity: 0.5, unit: "pęczek", optional: true },
+      { name: "Chleb (bread)", quantity: 0.2, unit: "op" },
+    ],
+  },
+  {
+    id: "idea-twarozek",
+    name: "Twarożek",
+    description: "Quick cottage cheese spread",
+    imageUrl: "https://cdn.aniagotuje.com/pictures/articles/2022/04/27603128-v-1500x1500.jpg",
+    recipeUrl: "https://aniagotuje.pl/przepis/twarozek",
+    kind: "idea",
+    ingredients: [
+      { name: "Twaróg (quark/cottage cheese)", quantity: 1, unit: "op" },
+      { name: "Jogurt naturalny (plain yogurt)", quantity: 150, unit: "ml" },
+      { name: "Rzodkiewki (radishes)", quantity: 1, unit: "op" },
+      { name: "Szczypiorek (chives)", quantity: 1, unit: "op" },
+      { name: "Sól (salt)", quantity: 2, unit: "g" },
+      { name: "Pieprz (pepper)", quantity: 1, unit: "g" },
+      { name: "Chleb (bread)", quantity: 0.2, unit: "op" },
+    ],
+  },
+  {
+    id: "idea-jajecznica",
+    name: "Jajecznica",
+    description: "Quick scrambled eggs idea",
+    imageUrl: "https://cdn.aniagotuje.com/pictures/articles/2022/01/23318618-v-1500x1500.jpg",
+    kind: "idea",
+    ingredients: [
+      { name: "Jajka (eggs)", quantity: 4, unit: "szt" },
+      { name: "Szynka (ham)", quantity: 1, unit: "op" },
+      { name: "Masło (butter)", quantity: 10, unit: "g" },
+      { name: "Chleb (bread)", quantity: 0.2, unit: "op" },
+      { name: "Cebula (onion)", quantity: 1, unit: "szt" },
     ],
   },
 ];

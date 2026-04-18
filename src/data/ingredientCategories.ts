@@ -71,7 +71,7 @@ const FRIDGE_VEGGIES_KEYWORDS = ["kiszon", "kwaszon", "kielk", "kimchi", "fermen
 const FROZEN_KEYWORDS = ["mrozon", "frozen", "fagy", "fagyaszt", "pizza", "lody", "ice cream", "frytki", "fries"];
 
 // 3. Cosmetics & household — unlikely in meal ingredients but needed for manual list entries
-const COSMETICS_KEYWORDS = ["mydl", "szampon", "zebow", "prysznic", "prania", "worek", "folia opak", "folia spozyw", "folia alumi", "odswiezacz", "papier toalet", "soap", "shampoo", "toothpaste", "detergent", "cleanin", "szappan", "sampon", "fogkrem", "mososzer", "wc papir", "tisztito"];
+const COSMETICS_KEYWORDS = ["mydl", "szampon", "zebow", "prysznic", "prania", "worek", "folia opak", "folia spozyw", "folia alumi", "odswiezacz", "papier toalet", "soap", "shampoo", "toothpaste", "detergent", "cleanin", "szappan", "sampon", "fogkrem", "mososzer", "wc papir", "tisztito", "condoms", "skyn"];
 
 // 4. Cold cuts & ham — checked before meat so "szynka" / "kiełbasa" don't land in Meat
 const COLD_CUTS_KEYWORDS = ["szynk", "kielbas", "parowk", "wedzin", "salami", "mortadel", "boczek", "bekon", "cold cut", "ham", "sausage", "sonka", "kolbasz", "szalonna"];

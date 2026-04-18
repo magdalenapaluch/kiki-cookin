@@ -156,6 +156,10 @@
   gap: 18px;
 }
 
+.ideas-section {
+  margin-top: 24px;
+}
+
 /* Mobile list backdrop */
 .list-fab {
   display: none;

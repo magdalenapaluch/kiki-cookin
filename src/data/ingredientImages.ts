@@ -53,6 +53,12 @@ const INGREDIENT_IMAGE_URLS: Record<string, string> = {
   "jogurt grecki": "https://res.cloudinary.com/dj484tw6k/image/upload/v1593174999/101897_5.png",
   "maka 00": "https://zakupy.auchan.pl/images-v3/91f3b8f0-9eaa-434b-8554-b0f1db433c99/7f32dbeb-6336-4e19-8b8b-b9be48edc048/500x500.jpg",
   skrobia: "https://zakupy.auchan.pl/images-v3/91f3b8f0-9eaa-434b-8554-b0f1db433c99/e9266738-e101-49f7-8a76-c1b8018e6f12/1280x1280.webp",
+  "platki yellow": "https://scontent-waw2-1.xx.fbcdn.net/v/t39.30808-6/577234562_1516146880274322_9196850346239594932_n.jpg?stp=cp6_dst-jpg_s1080x2048_tt6&_nc_cat=109&ccb=1-7&_nc_sid=7b2446&_nc_ohc=mm19EQEm_eYQ7kNvwEHPcfj&_nc_oc=Adpro_4tGsT7cu74Tvv8rbnuz4fGZqU_tG1rzrwGQTIy4qmsntzGyT3kTxhRH78u_4I&_nc_zt=23&_nc_ht=scontent-waw2-1.xx&_nc_gid=tMcGHXBUuRFCp6ISB1TRhw&_nc_ss=7a3a8&oh=00_Af3UCGCYdOVXC7pJq_b8qlHsp9Te2tIp8GV4E3radBJvwQ&oe=69E9CFBA",
+  cebula: "https://sklep.onix.pl/wp-content/uploads/2021/01/cebula-%C5%BC%C3%B3%C5%82ta.jpg",
+  "cebula czerwona": "https://bi.im-g.pl/im/47/1a/18/z25273415IER,Czerwona-cebula.jpg",
+  rzodkiewka: "https://azcdn.doz.pl/image/d/wiki-herb/6e895cb6-scale-795x350.png",
+  szczypiorek: "https://www.kowalczyk.olsztyn.pl/szczypiorek.2.jpg",
+  pietruszka: "https://bazarekpolski.pl/wp-content/uploads/2020/12/natka-pietruszki1.jpg",
 };
 
 const IMAGE_ALIASES: Record<string, string> = {
@@ -68,6 +74,14 @@ const IMAGE_ALIASES: Record<string, string> = {
   mozarella: "mozzarella",
   tejszin: "smietanka",
   "jogurt naturalny": "jogurt grecki",
+  "czerwona cebula": "cebula czerwona",
+  "red onion": "cebula czerwona",
+  onion: "cebula",
+  rzodkiewki: "rzodkiewka",
+  radishes: "rzodkiewka",
+  chives: "szczypiorek",
+  parsley: "pietruszka",
+  petrezselyem: "pietruszka",
 };
 
 export function getIngredientImageUrl(name: string): string | undefined {

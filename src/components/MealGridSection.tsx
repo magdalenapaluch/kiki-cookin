@@ -8,18 +8,34 @@ interface MealGridSectionProps {
 }
 
 export function MealGridSection({ meals, selectedIds, onToggleMeal }: MealGridSectionProps) {
+  const lunchMeals = meals.filter((meal) => meal.kind !== "idea");
+  const quickIdeas = meals.filter((meal) => meal.kind === "idea");
+
+  const selectedCount = selectedIds.size;
+
   return (
     <section className="meal-section">
       <h1 className="section-title">
-        Choose your meals
-        {selectedIds.size > 0 && <span className="badge">{selectedIds.size} selected</span>}
+        Lunches
+        {selectedCount > 0 && <span className="badge">{selectedCount} selected</span>}
       </h1>
 
       <div className="meal-grid">
-        {meals.map((meal) => (
+        {lunchMeals.map((meal) => (
           <MealCard key={meal.id} meal={meal} selected={selectedIds.has(meal.id)} onToggle={onToggleMeal} />
         ))}
       </div>
+
+      {quickIdeas.length > 0 && (
+        <section className="ideas-section" aria-label="Breakfast and dinner ideas">
+          <h2 className="section-title">Breakfast / Dinner ideas</h2>
+          <div className="meal-grid">
+            {quickIdeas.map((meal) => (
+              <MealCard key={meal.id} meal={meal} selected={selectedIds.has(meal.id)} onToggle={onToggleMeal} />
+            ))}
+          </div>
+        </section>
+      )}
     </section>
   );
 }
