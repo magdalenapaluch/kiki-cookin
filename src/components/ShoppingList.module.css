@@ -233,21 +233,61 @@
 .categories {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 0px;
 }
 
 .categorySection {
-  border-top: 2px solid var(--color-primary);
-  padding-top: 10px;
+  padding-top: 6px;
 }
 
 .categorySection:first-child {
-  border-top: none;
   padding-top: 0;
 }
 
 .categoryHeading {
-  display: none;
+  overflow: hidden;
+}
+
+.categoryEmojiRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 2px 0 6px;
+}
+
+.categoryEmojiRow::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  border-top: 3px solid var(--color-primary);
+}
+
+.categoryEmoji {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  font-size: 1.2rem;
+  line-height: 1;
+  background: var(--color-surface);
+}
+
+.categoryLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ── Ingredient list ── */

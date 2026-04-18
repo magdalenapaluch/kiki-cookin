@@ -35,6 +35,15 @@ interface DisplayIngredient {
 }
 
 const MEAL_COLORS = ["#f97316", "#8b5cf6", "#10b981", "#3b82f6", "#f43f5e", "#eab308", "#06b6d4", "#ec4899"];
+const CATEGORY_EMOJIS: Record<CategoryKey, string[]> = {
+  produce: ["🥕"],
+  dairyEggs: ["🧀"],
+  meatFish: ["🥩"],
+  grainsBakery: ["🥐"],
+  cannedDry: ["🥫"],
+  spicesCondiments: ["🫙"],
+  other: ["📦"],
+};
 
 export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll }: Props) {
   const [checkedItems, setCheckedItems] = useState<Set<string>>(() => {
@@ -212,7 +221,12 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
 
           return (
             <section key={category} className={styles.categorySection}>
-              <h3 className={styles.categoryHeading}>{CATEGORY_LABELS[category]}</h3>
+              <h3 className={styles.categoryHeading}>
+                <span className={styles.categoryEmojiRow} aria-hidden="true">
+                  <span className={styles.categoryEmoji}>{CATEGORY_EMOJIS[category][0]}</span>
+                </span>
+                <span className={styles.categoryLabel}>{CATEGORY_LABELS[category]}</span>
+              </h3>
               <ul className={styles.list}>
                 {items.map((ing, i) => {
                   const isChecked = checkedItems.has(ing.key);
