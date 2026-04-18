@@ -100,7 +100,9 @@ const INGREDIENT_IMAGE_URLS: Record<string, string> = {
   "cukier wanilinowy": "https://res.cloudinary.com/dj484tw6k/image/upload/v1690843723/469.png",
   dzem: "https://www.pakomarket.pl/wp-content/uploads/2025/11/LOWICZ-Dzem-Truskawkowy-Sloik-450g.png",
   "cinni minnis": "https://res.cloudinary.com/dj484tw6k/image/upload/v1730245622/141303.png",
+  "cinni minis": "https://res.cloudinary.com/dj484tw6k/image/upload/v1730245622/141303.png",
   cheddar: "https://euroser.pl/wp-content/uploads/2022/10/FEOEN5630-Cheddar-Red-scaled.webp",
+  woda: "https://upload.wikimedia.org/wikipedia/commons/0/06/Water_glass.jpg",
 };
 
 const IMAGE_ALIASES: Record<string, string> = {
@@ -135,6 +137,8 @@ const IMAGE_ALIASES: Record<string, string> = {
   milk: "mleko",
   sugar: "cukier",
   jam: "dzem",
+  chleb: "bread",
+  pieprz: "pieprz mielony",
 };
 
 export function getIngredientImageUrl(name: string): string | undefined {

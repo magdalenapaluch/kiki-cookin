@@ -77,7 +77,7 @@ const COSMETICS_KEYWORDS = ["mydl", "szampon", "zebow", "prysznic", "prania", "w
 const COLD_CUTS_KEYWORDS = ["szynk", "kielbas", "parowk", "wedzin", "salami", "mortadel", "boczek", "bekon", "cold cut", "ham", "sausage", "sonka", "kolbasz", "szalonna"];
 
 // 5. Cheese — checked before dairyYogurt (both can contain "ser"-like substrings)
-const CHEESE_KEYWORDS = ["ser", "twarog", "mozzarell", "feta", "parmezan", "mascarpone", "ricotta", "gorgonzol", "cheese", "quark", "cottage", "sajt", "turo"];
+const CHEESE_KEYWORDS = ["ser", "twarog", "mozzarell", "feta", "parmezan", "mascarpone", "ricotta", "gorgonzol", "cheese", "quark", "cottage", "sajt", "turo", "cheddar"];
 
 // 6. Yoghurts, butter, yeast, sour cream / heavy cream, lard
 const DAIRY_YOGURT_KEYWORDS = ["jogurt", "maslo", "drozdze", "kefir", "maslank", "smietan", "tejszin", "tejfol", "smalec", "yogurt", "butter", "yeast", "eleszto", "vaj"];
