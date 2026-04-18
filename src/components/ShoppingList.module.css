@@ -368,7 +368,9 @@
   display: block;
   min-width: 0;
   cursor: pointer;
-  user-select: text;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   padding: 2px 0;
   margin: -2px 0;
   border-radius: 4px;
@@ -475,6 +477,63 @@
   animation: imageContentIn 340ms ease-out;
 }
 
+.imageModalNoImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  padding: 20px;
+  background: #f8fafc;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.imageModalInfo {
+  padding: 14px 14px 16px;
+}
+
+.imageModalTitle {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 8px;
+}
+
+.imageModalMetaLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 0 0 7px;
+}
+
+.imageModalMetaText {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+}
+
+.imageModalMeals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.imageModalMealChip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--color-primary) 76%, #000);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 35%, var(--color-border));
+  background: color-mix(in srgb, var(--color-primary) 11%, transparent);
+  white-space: nowrap;
+}
+
 .imageModalClose {
   position: absolute;
   top: 10px;
@@ -525,26 +584,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.holdMeals {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.holdMealChip {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  padding: 1px 7px;
-  font-size: 0.64rem;
-  font-weight: 700;
-  line-height: 1.4;
-  border: 1px solid var(--meal-chip-color);
-  background: color-mix(in srgb, var(--meal-chip-color) 15%, transparent);
-  color: color-mix(in srgb, var(--meal-chip-color) 80%, #000);
-  white-space: nowrap;
 }
 
 .translation {

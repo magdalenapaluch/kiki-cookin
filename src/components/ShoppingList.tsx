@@ -44,6 +44,12 @@ interface DisplayIngredient {
   mealIds?: string[];
 }
 
+interface PreviewDetails {
+  name: string;
+  imageUrl?: string;
+  mealNames: string[];
+}
+
 const MEAL_COLORS = ["#f97316", "#8b5cf6", "#10b981", "#3b82f6", "#f43f5e", "#eab308", "#06b6d4", "#ec4899"];
 const CATEGORY_EMOJIS: Record<CategoryKey, string[]> = {
   bakery: ["🥐"],
@@ -87,7 +93,7 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
   const [newItemName, setNewItemName] = useState("");
   const [focusedMealId, setFocusedMealId] = useState<string | null>(null);
   const [heldIngredientKey, setHeldIngredientKey] = useState<string | null>(null);
-  const [previewImage, setPreviewImage] = useState<{ name: string; url: string } | null>(null);
+  const [previewDetails, setPreviewDetails] = useState<PreviewDetails | null>(null);
   const holdTimerRef = useRef<number | null>(null);
   const holdTriggeredRef = useRef(false);
 
@@ -129,30 +135,6 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
       }
       return next;
     });
-  };
-
-  const hasTextSelection = () => {
-    const selected = window.getSelection()?.toString() ?? "";
-    return selected.trim().length > 0;
-  };
-
-  const copyToClipboard = async (text: string) => {
-    const value = text.trim();
-    if (!value) return;
-
-    try {
-      await navigator.clipboard.writeText(value);
-    } catch {
-      const textarea = document.createElement("textarea");
-      textarea.value = value;
-      textarea.setAttribute("readonly", "");
-      textarea.style.position = "fixed";
-      textarea.style.left = "-9999px";
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
-    }
   };
 
   const addCustomItem = (event: React.FormEvent<HTMLFormElement>) => {
@@ -206,7 +188,6 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
     holdTimerRef.current = window.setTimeout(() => {
       holdTriggeredRef.current = true;
       setHeldIngredientKey(ingredient.key);
-      void copyToClipboard(ingredient.name);
     }, LONG_PRESS_MS);
   };
 
@@ -222,17 +203,17 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
   }, []);
 
   useEffect(() => {
-    if (!previewImage) return;
+    if (!previewDetails) return;
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setPreviewImage(null);
+        setPreviewDetails(null);
       }
     };
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [previewImage]);
+  }, [previewDetails]);
 
   const mealIngredients: DisplayIngredient[] = aggregateIngredients(selectedMeals).map((ing) => ({
     key: `meal__${ing.name.toLowerCase()}__${ing.unit}`,
@@ -262,14 +243,29 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
   }
 
   const imagePreviewModal =
-    previewImage && typeof document !== "undefined"
+    previewDetails && typeof document !== "undefined"
       ? createPortal(
-          <div className={styles.imageModalBackdrop} role="dialog" aria-modal="true" aria-label={`Image preview for ${previewImage.name}`} onClick={() => setPreviewImage(null)}>
+          <div className={styles.imageModalBackdrop} role="dialog" aria-modal="true" aria-label={`Details for ${previewDetails.name}`} onClick={() => setPreviewDetails(null)}>
             <div className={styles.imageModal} onClick={(e) => e.stopPropagation()}>
-              <button type="button" className={styles.imageModalClose} onClick={() => setPreviewImage(null)} aria-label="Close image preview">
+              <button type="button" className={styles.imageModalClose} onClick={() => setPreviewDetails(null)} aria-label="Close details">
                 ✕
               </button>
-              <img src={previewImage.url} alt={previewImage.name} className={styles.imageModalImage} />
+              {previewDetails.imageUrl ? <img src={previewDetails.imageUrl} alt={previewDetails.name} className={styles.imageModalImage} /> : <div className={styles.imageModalNoImage}>No image available</div>}
+              <div className={styles.imageModalInfo}>
+                <h4 className={styles.imageModalTitle}>{previewDetails.name}</h4>
+                <p className={styles.imageModalMetaLabel}>Used in:</p>
+                {previewDetails.mealNames.length > 0 ? (
+                  <div className={styles.imageModalMeals}>
+                    {previewDetails.mealNames.map((mealName) => (
+                      <span key={`${previewDetails.name}-${mealName}`} className={styles.imageModalMealChip}>
+                        {mealName}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className={styles.imageModalMetaText}>No selected meal uses this ingredient.</p>
+                )}
+              </div>
             </div>
           </div>,
           document.body,
@@ -342,7 +338,7 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
                     const highlightColor = isHighlighted ? mealColorMap.get(activeFocusedMealId!) : undefined;
                     const imageUrl = ing.isCustom ? undefined : getIngredientImageUrl(ing.name);
                     const isHeld = heldIngredientKey === ing.key;
-                    const relatedMealNames = (ing.mealIds ?? []).map((mealId) => ({ id: mealId, name: mealNameMap.get(mealId), color: mealColorMap.get(mealId) })).filter((meal): meal is { id: string; name: string; color: string } => Boolean(meal.name && meal.color));
+                    const relatedMealNames = (ing.mealIds ?? []).map((mealId) => mealNameMap.get(mealId)).filter((name): name is string => Boolean(name));
                     return (
                       <li key={`${category}-${ing.key}-${i}`} className={`${styles.item} ${ing.optional ? styles.optionalItem : ""} ${isChecked ? styles.checked : ""} ${isHighlighted ? styles.itemHighlighted : ""} ${isDimmed ? styles.itemDimmed : ""} ${isHeld ? styles.itemHeld : ""}`} style={isHighlighted ? ({ "--item-accent": highlightColor } as React.CSSProperties) : undefined}>
                         <button className={styles.checkbox} onClick={() => toggleItem(ing.key)} aria-label={`Toggle ${ing.name}`} aria-pressed={isChecked}>
@@ -351,9 +347,6 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
                         <span
                           className={styles.itemName}
                           onClick={() => {
-                            if (hasTextSelection()) {
-                              return;
-                            }
                             if (holdTriggeredRef.current) {
                               holdTriggeredRef.current = false;
                               return;
@@ -375,31 +368,20 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
                         >
                           <span className={styles.itemLabel}>
                             <IngredientName name={ing.name} />
-                            {imageUrl && (
-                              <button
-                                type="button"
-                                className={styles.imageIconBtn}
-                                onPointerDown={(e) => e.stopPropagation()}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setPreviewImage({ name: ing.name, url: imageUrl });
-                                }}
-                                aria-label={`Open image for ${ing.name}`}
-                                title="Open product image"
-                              >
-                                <InfoIcon />
-                              </button>
-                            )}
+                            <button
+                              type="button"
+                              className={styles.imageIconBtn}
+                              onPointerDown={(e) => e.stopPropagation()}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setPreviewDetails({ name: ing.name, imageUrl, mealNames: relatedMealNames });
+                              }}
+                              aria-label={`Open details for ${ing.name}`}
+                              title="Open ingredient details"
+                            >
+                              <InfoIcon />
+                            </button>
                             {ing.optional && <span className={styles.optionalInline}>optional</span>}
-                            {isHeld && relatedMealNames.length > 0 && (
-                              <span className={styles.holdMeals} role="status" aria-live="polite">
-                                {relatedMealNames.map((meal) => (
-                                  <span key={`${ing.key}-${meal.id}`} className={styles.holdMealChip} style={{ "--meal-chip-color": meal.color } as React.CSSProperties}>
-                                    {meal.name}
-                                  </span>
-                                ))}
-                              </span>
-                            )}
                           </span>
                         </span>
                         {ing.isCustom ? (
