@@ -119,6 +119,8 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
     const shouldClear = window.confirm("Clear all selected meals?");
     if (!shouldClear) return;
     onClearAll();
+    setCustomItems([]);
+    setCheckedItems(new Set());
   };
 
   const mealIngredients: DisplayIngredient[] = aggregateIngredients(selectedMeals).map((ing) => ({

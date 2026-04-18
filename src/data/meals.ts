@@ -82,11 +82,34 @@ export const CATEGORY_LABELS: Record<CategoryKey, string> = {
   other: "Other",
 };
 
+const POLISH_CHAR_MAP: Record<string, string> = {
+  ą: "a",
+  ć: "c",
+  ę: "e",
+  ł: "l",
+  ń: "n",
+  ó: "o",
+  ś: "s",
+  ź: "z",
+  ż: "z",
+  Ą: "a",
+  Ć: "c",
+  Ę: "e",
+  Ł: "l",
+  Ń: "n",
+  Ó: "o",
+  Ś: "s",
+  Ź: "z",
+  Ż: "z",
+};
+
 function normalizeForMatch(value: string): string {
   return value
+    .replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, (character) => POLISH_CHAR_MAP[character] ?? character)
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\(.+\)/g, "")
+    .replace(/\([^)]*\)/g, "")
+    .toLowerCase()
     .trim();
 }
 
@@ -94,36 +117,43 @@ function includesAny(text: string, candidates: string[]): boolean {
   return candidates.some((candidate) => text.includes(candidate));
 }
 
+const SPICES_CONDIMENTS_KEYWORDS = ["papryka w proszku", "papryka mielona", "pieprz", "cukier", "ocet", "kmin", "majeranek", "lisc", "laurow", "sol", "cynamon", "oregano", "bazylia", "tymianek", "wanilinow"];
+
+const CANNED_DRY_KEYWORDS = ["puszce", "fasola", "dzem", "ryz", "passata", "sucha bulka", "woda"];
+
+const PRODUCE_KEYWORDS = ["cebula", "papryka", "pomidor", "pomidorki", "ziemniak", "czosnek", "cukinia", "kukurydza", "kapusta", "ogorek", "seler", "ogorki kiszone"];
+
+const DAIRY_EGGS_KEYWORDS = ["mleko", "jaj", "smietana", "smietanka", "jogurt", "ser", "twarog", "maslo", "tejszin"];
+
+const MEAT_FISH_KEYWORDS = ["mieso", "kurczak", "boczek", "lopatka", "smalec"];
+
+const GRAINS_BAKERY_KEYWORDS = ["maka", "makaron", "bulka", "tortille", "pita", "ciasto", "skrobia", "drozdze", "bread"];
+
 export function getIngredientCategory(name: string): CategoryKey {
   const n = normalizeForMatch(name);
 
-  // Check for dry goods first (catches "sucha bułka")
-  if (n.includes("sucha")) {
+  if (includesAny(n, SPICES_CONDIMENTS_KEYWORDS)) {
+    return "spicesCondiments";
+  }
+
+  if (includesAny(n, CANNED_DRY_KEYWORDS)) {
     return "cannedDry";
   }
 
-  if (includesAny(n, ["cebula", "onion", "papryka", "pepper", "pomidor", "tomato", "ziemniak", "potato", "czosnek", "garlic", "cukinia", "zucchini", "kukurydza", "corn", "kapusta", "cabbage", "warzyw", "vegetable"])) {
+  if (includesAny(n, PRODUCE_KEYWORDS)) {
     return "produce";
   }
 
-  if (includesAny(n, ["mleko", "milk", "jaj", "egg", "smietana", "jogurt", "ser", "twarog", "maslo", "cream", "tejszin"])) {
+  if (includesAny(n, DAIRY_EGGS_KEYWORDS)) {
     return "dairyEggs";
   }
 
-  if (includesAny(n, ["mieso", "meat", "kurczak", "chicken", "wieprz", "pork", "boczek", "bacon", "lopatka"])) {
+  if (includesAny(n, MEAT_FISH_KEYWORDS)) {
     return "meatFish";
   }
 
-  if (includesAny(n, ["maka", "flour", "makaron", "pasta", "bulka", "bread", "tortille", "pita", "ciasto", "pastry", "skrobia", "starch"])) {
+  if (includesAny(n, GRAINS_BAKERY_KEYWORDS)) {
     return "grainsBakery";
-  }
-
-  if (includesAny(n, ["puszce", "canned", "fasola", "bean", "dzem", "jam", "breadcrumbs", "kasza", "ryz", "rice", "sucha"])) {
-    return "cannedDry";
-  }
-
-  if (includesAny(n, ["pieprz", "pepper", "cukier", "sugar", "ocet", "vinegar", "papryka w proszku", "kmin", "majeranek", "lis", "laurow", "sol", "salt"])) {
-    return "spicesCondiments";
   }
 
   return "other";
@@ -188,8 +218,8 @@ export const meals: Meal[] = [
       { name: "Masło (butter)", quantity: 50, unit: "g" },
       { name: "Bułka tarta (breadcrumbs)", quantity: 1, unit: "op" },
       { name: "Sucha bułka (dry bread roll)", quantity: 1, unit: "szt" },
-      { name: "Ocet (vinegar)", quantity: 1, unit: "łyżka" },
-      { name: "Cukier (sugar)", quantity: 1, unit: "łyżeczka" },
+      { name: "Ocet (vinegar)", quantity: 15, unit: "ml" },
+      { name: "Cukier (sugar)", quantity: 12, unit: "g" },
       { name: "Pieprz mielony (ground pepper)", quantity: 1, unit: "łyżeczka" },
       { name: "Liść laurowy (bay leaf)", quantity: 2, unit: "szt" },
       { name: "Majeranek (marjoram)", quantity: 1, unit: "łyżeczka" },
@@ -322,18 +352,16 @@ export const meals: Meal[] = [
       { name: "Ryż (rice)", quantity: 150, unit: "g" },
       { name: "Cebula (onion)", quantity: 2, unit: "szt" },
       { name: "Czosnek (garlic)", quantity: 1, unit: "ząbki" },
-      { name: "Smalec wieprzowy (pork lard)", quantity: 2, unit: "łyżka", note: "do farszu" },
-      { name: "Smalec wieprzowy (pork lard)", quantity: 1, unit: "łyżka", note: "do sosu" },
+      { name: "Smalec wieprzowy (pork lard)", quantity: 26, unit: "g", note: "do farszu" },
+      { name: "Smalec wieprzowy (pork lard)", quantity: 13, unit: "g", note: "do sosu" },
       { name: "Papryka mielona (ground paprika)", quantity: 1, unit: "łyżeczka" },
       { name: "Mięso mielone wieprzowe (ground pork)", quantity: 500, unit: "g" },
       { name: "Papryka do faszerowania (stuffing peppers)", quantity: 8, unit: "szt" },
-      { name: "Cukier (sugar)", quantity: 2, unit: "łyżka" },
-      { name: "Mąka (flour)", quantity: 2, unit: "łyżka" },
+      { name: "Cukier (sugar)", quantity: 25, unit: "g" },
+      { name: "Mąka (flour)", quantity: 25, unit: "g" },
       { name: "Passata pomidorowa (tomato passata)", quantity: 1000, unit: "ml" },
       { name: "Woda (water)", quantity: 500, unit: "ml" },
       { name: "Liście selera (celery leaves)", quantity: 1, unit: "pęczek" },
-      { name: "Sól (salt)", quantity: 1, unit: "op", optional: true },
-      { name: "Pieprz (pepper)", quantity: 1, unit: "op", optional: true },
     ],
   },
 ];
