@@ -120,17 +120,17 @@ function includesAny(text: string, candidates: string[]): boolean {
   return candidates.some((candidate) => text.includes(candidate));
 }
 
-const SPICES_CONDIMENTS_KEYWORDS = ["papryka w proszku", "papryka mielona", "pieprz", "cukier", "ocet", "kmin", "majeranek", "laurow", "sol", "cynamon", "oregano", "bazylia", "tymianek", "wanilinow"];
+const SPICES_CONDIMENTS_KEYWORDS = ["prosz", "papryka mielona", "papryka slodka", "papryka wedzon", "pieprz", "cukier", "ocet", "kmin", "majeranek", "laurow", "sol", "cynamon", "oregano", "bazyli", "tymianek", "wanilinow", "curry", "kurkum", "chili", "imbir", "czosnek granul", "musztard", "pistac"];
 
-const CANNED_DRY_KEYWORDS = ["puszce", "fasola", "dzem", "ryz", "passata", "sucha bulka", "woda"];
+const CANNED_DRY_KEYWORDS = ["puszce", "fasola", "dzem", "ryz", "passata", "sucha bulka", "woda", "kasz", "soczew", "ciecierzyc", "groch", "quinoa", "nutella", "kuskus", "bulgur", "platki", "orzech", "pestk", "nasion", "kakao"];
 
-const PRODUCE_KEYWORDS = ["cebula", "papryka", "pomidor", "pomidorki", "ziemniak", "czosnek", "cukinia", "kukurydza", "kapusta", "ogorek", "seler", "ogorki kiszone"];
+const PRODUCE_KEYWORDS = ["cebul", "papryk", "pomidor", "ziemniak", "czosn", "cukini", "kukurydz", "kapust", "ogor", "seler", "owoc", "owoce", "jablk", "banan", "truskawk", "malin", "borowk", "jagod", "winogron", "cytryn", "limonk", "pomarancz", "gruszk", "brzoskwin", "kiwi", "mango", "salat", "rukol", "szpinak", "por", "brokul", "kalafior", "baklazan", "rzodkiew", "pieczark", "pietruszk", "koper", "szczypior"];
 
-const DAIRY_EGGS_KEYWORDS = ["mleko", "jaj", "smietana", "smietanka", "jogurt", "ser", "twarog", "maslo", "tejszin"];
+const DAIRY_EGGS_KEYWORDS = ["mleko", "jaj", "smietan", "jogurt", "ser", "twarog", "maslo", "tejszin", "smieta", "kefir", "mozzarella", "feta", "parmezan", "mascarpone"];
 
-const MEAT_FISH_KEYWORDS = ["mieso", "kurczak", "boczek", "lopatka", "smalec"];
+const MEAT_FISH_KEYWORDS = ["mieso", "kurczak", "boczek", "lopatka", "smalec", "bekon", "szynka", "kielbasa", "ryba", "losos", "dorsz", "tunczyk", "krewetk", "indyk", "wolow", "wieprzow", "cielec", "baran", "jagniec", "golec", "pasztet"];
 
-const GRAINS_BAKERY_KEYWORDS = ["maka", "makaron", "bulka", "tortille", "pita", "ciasto", "skrobia", "drozdze", "bread"];
+const GRAINS_BAKERY_KEYWORDS = ["maka", "makaron", "bulk", "tortill", "pita", "ciast", "skrobia", "drozdze", "bread", "chleb", "bagiet", "buleczk", "tortellini", "gnocchi"];
 
 export function getIngredientCategory(name: string): CategoryKey {
   const n = normalizeForMatch(name);
