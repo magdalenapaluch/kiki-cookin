@@ -149,6 +149,13 @@
   gap: 12px;
 }
 
+.instructionsText {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  white-space: pre-line;
+}
+
 .instructions p {
   font-size: 0.95rem;
   line-height: 1.6;

@@ -17,6 +17,7 @@ export function RecipeDetail() {
   const navigate = useNavigate();
 
   const meal = meals.find((m) => m.id === mealId);
+  const normalizedContent = meal?.content?.replace(/\\n/g, "\n").replace(/\/n/g, "\n");
 
   if (!meal) {
     return (
@@ -41,14 +42,10 @@ export function RecipeDetail() {
         <div className={styles.content}>
           <h1 className={styles.title}>{meal.name}</h1>
 
-          {meal.content && (
+          {normalizedContent && (
             <section className={styles.section}>
               <h2 className={styles.sectionTitle}>Instructions</h2>
-              <div className={styles.instructions}>
-                {meal.content.split("\n\n").map((paragraph, i) => (
-                  <p key={i}>{paragraph}</p>
-                ))}
-              </div>
+              <div className={styles.instructionsText}>{normalizedContent}</div>
             </section>
           )}
 
