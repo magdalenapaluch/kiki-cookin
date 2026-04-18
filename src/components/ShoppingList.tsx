@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { type Meal, aggregateIngredients, formatQuantity, type CategoryKey, CATEGORY_ORDER, CATEGORY_LABELS, getIngredientCategory } from "../data/meals";
 import styles from "./ShoppingList.module.css";
 
@@ -35,6 +35,19 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
   useEffect(() => {
     localStorage.setItem("shoppingListChecked", JSON.stringify(Array.from(checkedItems)));
   }, [checkedItems]);
+
+  const previousSelectedMealIdsRef = useRef<Set<string>>(new Set(selectedMeals.map((meal) => meal.id)));
+
+  useEffect(() => {
+    const currentSelectedMealIds = new Set(selectedMeals.map((meal) => meal.id));
+    const hadDeselection = Array.from(previousSelectedMealIdsRef.current).some((id) => !currentSelectedMealIds.has(id));
+
+    if (hadDeselection) {
+      setCheckedItems(new Set());
+    }
+
+    previousSelectedMealIdsRef.current = currentSelectedMealIds;
+  }, [selectedMeals]);
 
   const getItemKey = (name: string, unit: string) => `${name.toLowerCase()}__${unit}`;
 
