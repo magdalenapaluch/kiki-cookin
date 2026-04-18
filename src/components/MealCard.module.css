@@ -1,0 +1,208 @@
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  border: 2px solid transparent;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s,
+    transform 0.15s;
+  outline: none;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.card:focus-visible {
+  border-color: var(--color-primary);
+}
+
+.card.selected {
+  border-color: var(--color-selected);
+  background: #fffcfa;
+}
+
+/* ── Image ── */
+.imageWrapper {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #f0ebe5;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.card:hover .image {
+  transform: scale(1.04);
+}
+
+.checkmark {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  animation: popIn 0.18s ease;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── Body ── */
+.body {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.description {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* ── Ingredient details ── */
+.details {
+  margin-top: 4px;
+}
+
+.detailsSummary {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.detailsSummary::before {
+  content: "▶";
+  font-size: 0.6rem;
+  transition: transform 0.15s;
+}
+
+details[open] .detailsSummary::before {
+  transform: rotate(90deg);
+}
+
+.ingredientList {
+  margin-top: 8px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ingredientList li {
+  font-size: 0.78rem;
+  color: var(--color-text);
+  padding: 3px 0;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.optional {
+  color: var(--color-text-muted) !important;
+}
+
+.qty {
+  font-weight: 600;
+  color: var(--color-primary);
+  min-width: 60px;
+  font-size: 0.78rem;
+}
+
+.translation {
+  color: var(--color-text-muted);
+  font-weight: 400;
+  font-size: 0.85em;
+}
+
+.note {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.optTag {
+  font-size: 0.68rem;
+  color: var(--color-text-muted);
+  background: #f3f3f3;
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-left: auto;
+}
+
+/* ── Recipe link ── */
+.recipeLink {
+  font-size: 0.78rem;
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: none;
+  margin-top: auto;
+  align-self: flex-start;
+  transition: text-decoration 0.1s;
+}
+
+.recipeLink:hover {
+  text-decoration: underline;
+}
+
+/* ── Select bar ── */
+.selectBar {
+  padding: 10px 16px;
+  background: var(--color-primary-light);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  text-align: center;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.card.selected .selectBar {
+  background: var(--color-primary);
+  color: white;
+}
