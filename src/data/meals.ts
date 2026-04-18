@@ -136,15 +136,7 @@ export const meals: Meal[] = [
     description: "Savory quiche with cheese, veggies & bacon",
     imageUrl: "https://cdn.aniagotuje.com/pictures/articles/2023/03/40271701-v-1080x1080.jpg",
     recipeUrl: "https://aniagotuje.pl/przepis/quiche-lorraine",
-    content: `Rozgrzej piekarnik do 200°C. Umieść ciasto na tartę w formie.
-
-Pokrój cebulę i paprykę. Portnij boczek na paski i smaż na rumiano. Odstaw na bok.
-
-Dodaj pokrojoną cebulę i paprykę do tłuszczu po boczku, smaż aż się zmiękczą. Wymieszaj jajka ze śmietaną, dopraw solą i pieprzem.
-
-Uloż ugotowane warzywa i boczek na cieście. Zalej masą jajeczno-śmietankową. Posypuj tartym serem na górze.
-
-Piecz przez 25-30 minut aż złoci się i będzie ścisła. Schłodź lekko przed podaniem.`,
+    content: `Rozgrzej piekarnik do 200°C. Umieść ciasto na tartę w formie./n/nPokrój cebulę i paprykę. Portnij boczek na paski i smaż na rumiano. Odstaw na bok./n/nDodaj pokrojoną cebulę i paprykę do tłuszczu po boczku, smaż aż się zmiękczą. Wymieszaj jajka ze śmietaną, dopraw solą i pieprzem./n/nUloż ugotowane warzywa i boczek na cieście. Zalej masą jajeczno-śmietankową. Posypuj tartym serem na górze./n/nPiecz przez 25-30 minut aż złoci się i będzie ścisła. Schłodź lekko przed podaniem.`,
     ingredients: [
       { name: "Ciasto na tartę (tart pastry)", quantity: 1, unit: "op" },
       { name: "Ser żółty (yellow cheese)", quantity: 1, unit: "op" },
@@ -182,7 +174,7 @@ Piecz przez 25-30 minut aż złoci się i będzie ścisła. Schłodź lekko prze
     description: "Hungarian creamy potato stew with meatballs",
     imageUrl: "https://production.streetkitchen-cdn.com/ze-kurmplifozelek-fasirttal-2-large-emKSiC.webp",
     recipeUrl: "https://streetkitchen.hu/receptek/magyaros-krumplifozelek-fasirttal-imadjuk",
-    content: `Na pulpety: zmocz suchą bułkę w mleku. Wymieszaj mielone wieprzowne z namoczonym chlebem, jednym jajkiem, posiekanym czoskiem, solą i pieprzem. Uformuj kulki i smaż do złota. Odłóż na bok./n/nNa főzelék: pokrój ziemniaki i cebulę. Rozpuść masło w dużym garnku i smaż cebulę do miękkości. Dodaj ziemniaki i 2 litry wody. Gotuj przez 15 minut./n/nPrzygotuj zasmażkę: wymieszaj mąkę z 2-3 łyżkami masła, gotuj na jasno. Dodaj do ziemniaków, ciągle mieszając./n/nDodaj pulpety, liście laurowe, majeranek, ocet, cukier i przyprawy. Gotuj jeszcze 10-15 minut./n/nZmieszaj śmietanę ze skrobią i trochą ciepłego bujonu. Dodaj do stewu. Gotuj 5 minut. Dopraw do smaku.`,
+    content: `Na pulpety: zmocz suchą bułkę w mleku. Wymieszaj mielone wieprzowne z namoczonym chlebem, jednym jajkiem, posiekanym czoskiem, solą i pieprzem. Uformuj kulki i smaż do złota. Odłóż na bok.\n\nNa főzelék: pokrój ziemniaki i cebulę. Rozpuść masło w dużym garnku i smaż cebulę do miękkości. Dodaj ziemniaki i 2 litry wody. Gotuj przez 15 minut.\n\nPrzygotuj zasmażkę: wymieszaj mąkę z 2-3 łyżkami masła, gotuj na jasno. Dodaj do ziemniaków, ciągle mieszając.\n\nDodaj pulpety, liście laurowe, majeranek, ocet, cukier i przyprawy. Gotuj jeszcze 10-15 minut.\n\nZmieszaj śmietanę ze skrobią i trochą ciepłego bujonu. Dodaj do stewu. Gotuj 5 minut. Dopraw do smaku.`,
     ingredients: [
       { name: "Cebula (onion)", quantity: 2, unit: "szt" },
       { name: "Ziemniaki (potatoes)", quantity: 1500, unit: "g" },
@@ -224,7 +216,7 @@ Piecz przez 25-30 minut aż złoci się i będzie ścisła. Schłodź lekko prze
     description: "Mexican-style wraps with ground meat, beans & cheese",
     imageUrl: "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/quesadilla.jpg",
     recipeUrl: "https://www.kwestiasmaku.com/przepis/quesadilla-z-kurczakiem-i-warzywami/",
-    content: `Rozgrzej olej na patelni i smaż pokrojoną cebulę do miękkości. Dodaj mielone mięso i smaż aż się zbrązi, mieszając./n/nDodaj fasołę z puszki (odcedzoną) i dopraw koperkielem, chili, solą i pieprzem. Gotuj przez 5 minut./n/nDodaj pokrojoną paprykę i kukurydzę. Gotuj jeszcze kilka minut./n/nDo montażu: rozgrzej blaszkę lub dużą patelnię. Połóż tortillę, dodaj mięso i ser na jednej połowie. Złóż na pół i smaż do złota. Przewróć i smaż drugą stronę aż ser się rozpuści i tortilla będzie chrupiąca./n/nAlternatywnie podaj mięso jako nadzienie i pozwól gościom na własny montaż.`,
+    content: `Rozgrzej olej na patelni i smaż pokrojoną cebulę do miękkości. Dodaj mielone mięso i smaż aż się zbrązi, mieszając.\n\nDodaj fasołę z puszki (odcedzoną) i dopraw koperkielem, chili, solą i pieprzem. Gotuj przez 5 minut.\n\nDodaj pokrojoną paprykę i kukurydzę. Gotuj jeszcze kilka minut.\n\nDo montażu: rozgrzej blaszkę lub dużą patelnię. Połóż tortillę, dodaj mięso i ser na jednej połowie. Złóż na pół i smaż do złota. Przewróć i smaż drugą stronę aż ser się rozpuści i tortilla będzie chrupiąca.\n\nAlternatywnie podaj mięso jako nadzienie i pozwól gościom na własny montaż.`,
     ingredients: [
       { name: "Tortille (tortillas)", quantity: 1, unit: "op" },
       { name: "Ser żółty (yellow cheese)", quantity: 1, unit: "op", note: "tarty / grated" },
@@ -241,7 +233,7 @@ Piecz przez 25-30 minut aż złoci się i będzie ścisła. Schłodź lekko prze
     name: "Spaghetti",
     description: "Classic spaghetti bolognese with ground meat & tomato sauce",
     imageUrl: "https://cdn.aniagotuje.com/pictures/articles/2024/05/61816591-v-1080x1080.jpg",
-    content: `Drobno pokrój cebulę. Rozgrzej olej w dużym garnku i smaż cebulę do przezroczystości./n/nDodaj mielone mięso i smaż do zbrązowienia, mieszając i odcedzając nadmiar tłuszczu./n/nDodaj pomidory z puszki z sokiem, lekko je miażdżąc. Dopraw solą, pieprzem i suszonymi ziołami (bazylią, oreganem). Gotuj 20-30 minut, od czasu do czasu mieszając. Sos powinien się zagęścić, a smaki się zmieszać./n/nWtedy, gdy sos się gotuje, zagotuj dużą porcję osolonej wody. Dodaj spaghetti i gotuj według instrukcji na opakowaniu na al dente. Dobrze odcedź./n/nPodaj makaron z sosem bolognese i tartym serem parmezańskim.`,
+    content: `Drobno pokrój cebulę. Rozgrzej olej w dużym garnku i smaż cebulę do przezroczystości.\n\nDodaj mielone mięso i smaż do zbrązowienia, mieszając i odcedzając nadmiar tłuszczu.\n\nDodaj pomidory z puszki z sokiem, lekko je miażdżąc. Dopraw solą, pieprzem i suszonymi ziołami (bazylią, oreganem). Gotuj 20-30 minut, od czasu do czasu mieszając. Sos powinien się zagęścić, a smaki się zmieszać.\n\nWtedy, gdy sos się gotuje, zagotuj dużą porcję osolonej wody. Dodaj spaghetti i gotuj według instrukcji na opakowaniu na al dente. Dobrze odcedź.\n\nPodaj makaron z sosem bolognese i tartym serem parmezańskim.`,
     ingredients: [
       { name: "Makaron spaghetti (spaghetti pasta)", quantity: 0.5, unit: "op" },
       { name: "Mięso mielone (ground meat)", quantity: 500, unit: "g" },
@@ -255,7 +247,7 @@ Piecz przez 25-30 minut aż złoci się i będzie ścisła. Schłodź lekko prze
     description: "Grilled chicken & vegetable skewers",
     imageUrl: "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/szaszlyki_z_kurczakiem.jpg",
     recipeUrl: "https://www.kwestiasmaku.com/dania_dla_dwojga/party/szaszlyki_z_kurczakiem/przepis.html",
-    content: `Pokrój piersi z kurczaka na kawałki 2-3 cm. Pokrój cukinię wzdłuż na ćwiartki, potem na kawałki. Pokrój paprykę i cebulę na kawałki. Pomidorki koktajlowe zostaw całe./n/nPrzygotuj marynację: wymieszaj olej, sok z cytryny, posiekanym czosnek, sól, pieprz i zioła (oregano, tymianek). Wrzuć kurczaka i warzywa, zostaw na co najmniej 30 minut./n/nNakań kurczaka i warzywa naprzemiennie na szaszłyki, zaczynając i kończąc cebulą, aby je utrzymać./n/nGrill nad średnio wysokim ogniem przez 12-15 minut, obracając od czasu do czasu, aż kurczak będzie gotowy, a warzywa miękkie./n/nOdstaw na kilka minut przed podaniem, podaj z cytrynką i świeżymi ziołami.`,
+    content: `Pokrój piersi z kurczaka na kawałki 2-3 cm. Pokrój cukinię wzdłuż na ćwiartki, potem na kawałki. Pokrój paprykę i cebulę na kawałki. Pomidorki koktajlowe zostaw całe.\n\nPrzygotuj marynację: wymieszaj olej, sok z cytryny, posiekanym czosnek, sól, pieprz i zioła (oregano, tymianek). Wrzuć kurczaka i warzywa, zostaw na co najmniej 30 minut.\n\nNakań kurczaka i warzywa naprzemiennie na szaszłyki, zaczynając i kończąc cebulą, aby je utrzymać.\n\nGrill nad średnio wysokim ogniem przez 12-15 minut, obracając od czasu do czasu, aż kurczak będzie gotowy, a warzywa miękkie.\n\nOdstaw na kilka minut przed podaniem, podaj z cytrynką i świeżymi ziołami.`,
     ingredients: [
       { name: "Piersi z kurczaka (chicken breasts)", quantity: 500, unit: "g" },
       { name: "Cukinia (zucchini)", quantity: 1, unit: "szt" },
@@ -270,12 +262,13 @@ Piecz przez 25-30 minut aż złoci się i będzie ścisła. Schłodź lekko prze
     description: "Greek-style yogurt dip with grilled chicken & pita",
     imageUrl: "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/tzatziki_greckie.jpg",
     recipeUrl: "https://www.kwestiasmaku.com/przepis/tzatziki",
-    content: `Na tzatziki: zetrzyj ogórek i wyciśnij nadmiar wilgoci. Drobno posiekaj czosnek./n/nWymieszaj jogurt z tartym ogórkiem, posiekanym czoskiem, solą, pieprzem i świeżymi ziołami (koperkiem lub pietruszką). Schłodź co najmniej 1 godzinę./n/nNa kurczaka: dopraw piersi z kurczaka solą, pieprzem, oreganem i sokiem z cytryny. Grill nad średnio wysokim ogniem przez 6-7 minut każdą stronę aż będzie gotowy. Odstaw na 5 minut, potem pokrój./n/nRozgrzej chleb pita na grillu. Montuj rozmazując tzatziki na ciepłym pitcie, dodaj plasterki kurczaka, świeże pomidory, ogórek i czerwoną cebulę.`,
+    content: `Na tzatziki: zetrzyj ogórek i wyciśnij nadmiar wilgoci. Drobno posiekaj czosnek.\n\nWymieszaj jogurt z tartym ogórkiem, posiekanym czoskiem, solą, pieprzem i świeżymi ziołami (koperkiem lub pietruszką). Schłodź co najmniej 1 godzinę.\n\nNa kurczaka: dopraw piersi z kurczaka solą, pieprzem, oreganem i sokiem z cytryny. Grill nad średnio wysokim ogniem przez 6-7 minut każdą stronę aż będzie gotowy. Odstaw na 5 minut, potem pokrój.\n\nRozgrzej chleb pita na grillu. Montuj rozmazując tzatziki na ciepłym pitcie, dodaj plasterki kurczaka, świeże pomidory, ogórek i czerwoną cebulę.`,
     ingredients: [
       { name: "Jogurt naturalny (plain yogurt)", quantity: 400, unit: "ml" },
       { name: "Czosnek (garlic)", quantity: 5, unit: "ząbki" },
       { name: "Pita bread", quantity: 1, unit: "op" },
       { name: "Piersi z kurczaka (chicken breasts)", quantity: 500, unit: "g" },
+      { name: "Ogórek (cucumber)", quantity: 1, unit: "szt" },
     ],
   },
   {
@@ -284,7 +277,7 @@ Piecz przez 25-30 minut aż złoci się i będzie ścisła. Schłodź lekko prze
     description: "Hearty Transylvanian pork & sauerkraut stew",
     imageUrl: "https://cdn.mindmegette.hu/2024/04/AmItR2xFasmFOyqrLsLbCPol76um4hVI7YN8TYqxWMM/fill/0/0/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50LzVhMTUzNmRjZWZmNDQ2ZGRhZmRiNWQwMThkNzkwZDMy.webp",
     recipeUrl: "https://www.mindmegette.hu/recept/szekelykaposzta",
-    content: `Cube the pork shoulder. Dice the onion and mince the garlic./n/nHeat oil in a large pot and brown the meat on all sides. Remove and set aside./n/nIn the same pot, cook diced onion until translucent. Add minced garlic and cook for another 30 seconds. Stir in paprika powder, add a splash of water, and cook gently stewing the spices./n/nReturn the meat to the pot. Season with salt and caraway seeds, then add the bell peppers and tomato. Cover and simmer on low heat for 5 more minutes./n/nRinse the sauerkraut and squeeze out excess liquid. Add it to the pot along with enough water to almost cover. Simmer gently until the meat and cabbage are very tender./n/nMix sour cream with flour in a separate bowl to make a smooth paste. Dilute with 1 dl cold water and a little of the cooking broth until lump-free. Stir this mixture into the stew and simmer for another 5 minutes. Adjust seasoning if needed.`,
+    content: `Cube the pork shoulder. Dice the onion and mince the garlic.\n\nHeat oil in a large pot and brown the meat on all sides. Remove and set aside.\n\nIn the same pot, cook diced onion until translucent. Add minced garlic and cook for another 30 seconds. Stir in paprika powder, add a splash of water, and cook gently stewing the spices.\n\nReturn the meat to the pot. Season with salt and caraway seeds, then add the bell peppers and tomato. Cover and simmer on low heat for 5 more minutes.\n\nRinse the sauerkraut and squeeze out excess liquid. Add it to the pot along with enough water to almost cover. Simmer gently until the meat and cabbage are very tender.\n\nMix sour cream with flour in a separate bowl to make a smooth paste. Dilute with 1 dl cold water and a little of the cooking broth until lump-free. Stir this mixture into the stew and simmer for another 5 minutes. Adjust seasoning if needed.`,
     ingredients: [
       { name: "Łopatka wieprzowa (pork shoulder)", quantity: 700, unit: "g" },
       { name: "Czosnek (garlic)", quantity: 2, unit: "ząbki" },
@@ -304,7 +297,7 @@ Piecz przez 25-30 minut aż złoci się i będzie ścisła. Schłodź lekko prze
     description: "Miękkie bułeczki drożdżowe z cynamonem",
     recipeUrl: "https://www.kwestiasmaku.com/przepis/buleczki-cynamonowe-cinnamon-rolls",
     imageUrl: "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/cynamonki-03.jpg",
-    content: `Ciasto: do misy wsyp mąkę, drożdże instant, cukier i szczyptę soli. Wymieszaj. Dodaj letnie mleko oraz 2 jajka i zacznij wyrabiać ciasto na wolnych obrotach. Następnie, cały czas wyrabiając, dodawaj po kawałku miękkie masło (70 g)./n/nWyrabiaj ok. 15 minut, aż ciasto będzie gładkie i sprężyste. Przykryj ściereczką i odstaw na minimum 1 godzinę do wyrośnięcia w ciepłym miejscu./n/nWyrośnięte ciasto przełóż na oprószony mąką blat, krótko zagnieć i podziel na 2 części. Każdą część rozwałkuj delikatnie na placek o wymiarach ok. 30 x 30 cm./n/nNadzienie: placki posmaruj miękkim masłem (70 g), następnie posyp mieszanką cynamonu, cukru wanilinowego i cukru trzcinowego. Opcjonalnie dodaj skórkę startą z 1/2 cytryny./n/nZwiń oba placki w roladki i pokrój każdą na 10 plasterków (ok. 2 cm). Ułóż bułeczki na blaszce wyłożonej papierem do pieczenia i odstaw na 15-20 minut do ponownego wyrośnięcia./n/nPiekarnik nagrzej do 180°C. Wierzch bułeczek posmaruj roztrzepanym jajkiem i piecz ok. 20 minut, aż będą złote./n/nW tej wersji pomijamy lukier i podajemy cynamonki bez polewy.`,
+    content: `Ciasto: do misy wsyp mąkę, drożdże instant, cukier i szczyptę soli. Wymieszaj. Dodaj letnie mleko oraz 2 jajka i zacznij wyrabiać ciasto na wolnych obrotach. Następnie, cały czas wyrabiając, dodawaj po kawałku miękkie masło (70 g).\n\nWyrabiaj ok. 15 minut, aż ciasto będzie gładkie i sprężyste. Przykryj ściereczką i odstaw na minimum 1 godzinę do wyrośnięcia w ciepłym miejscu.\n\nWyrośnięte ciasto przełóż na oprószony mąką blat, krótko zagnieć i podziel na 2 części. Każdą część rozwałkuj delikatnie na placek o wymiarach ok. 30 x 30 cm.\n\nNadzienie: placki posmaruj miękkim masłem (70 g), następnie posyp mieszanką cynamonu, cukru wanilinowego i cukru trzcinowego. Opcjonalnie dodaj skórkę startą z 1/2 cytryny.\n\nZwiń oba placki w roladki i pokrój każdą na 10 plasterków (ok. 2 cm). Ułóż bułeczki na blaszce wyłożonej papierem do pieczenia i odstaw na 15-20 minut do ponownego wyrośnięcia.\n\nPiekarnik nagrzej do 180°C. Wierzch bułeczek posmaruj roztrzepanym jajkiem i piecz ok. 20 minut, aż będą złote.\n\nW tej wersji pomijamy lukier i podajemy cynamonki bez polewy.`,
     ingredients: [
       { name: "Mąka pszenna (wheat flour)", quantity: 250, unit: "g" },
       { name: "Drożdże", quantity: 15, unit: "g" },

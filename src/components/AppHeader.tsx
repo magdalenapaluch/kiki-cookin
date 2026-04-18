@@ -8,7 +8,7 @@ export function AppHeader({ itemCount, onOpenList }: AppHeaderProps) {
     <header className="header">
       <div className="header-inner">
         <div className="logo">
-          <span className="logo-icon">🍳</span>
+          <span className="logo-icon">🌶️</span>
           <span className="logo-text">Kiki Cookin'</span>
         </div>
 

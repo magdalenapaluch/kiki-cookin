@@ -28,24 +28,33 @@
 
 .clearBtn {
   background: none;
-  border: 1px solid var(--color-border);
-  color: var(--color-text-muted);
+  border: 1px solid transparent;
+  color: #111;
   border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 0.8rem;
+  padding: 4px 8px;
+  font-size: 0.72rem;
   font-family: inherit;
   font-weight: 500;
   cursor: pointer;
+  opacity: 0.45;
   transition:
+    opacity 0.15s ease,
     color 0.15s ease,
     border-color 0.15s ease,
     background 0.15s ease;
 }
 
 .clearBtn:hover {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-  background: var(--color-primary-light);
+  opacity: 1;
+  color: #991b1b;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.clearBtn:focus-visible {
+  opacity: 1;
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+  outline-offset: 1px;
 }
 
 .closeBtn {
@@ -97,6 +106,10 @@
     align-items: center;
     justify-content: center;
   }
+
+  .customForm {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
 }
 
 .panel::-webkit-scrollbar {
@@ -146,6 +159,43 @@
   margin-bottom: 12px;
 }
 
+.customForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.customName {
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.78rem;
+  font-family: inherit;
+}
+
+.customName:focus {
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 32%, transparent);
+  outline-offset: 0;
+  border-color: var(--color-primary);
+}
+
+.customAddBtn {
+  border: 1px solid var(--color-primary);
+  color: #fff;
+  background: var(--color-primary);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.customAddBtn:hover {
+  filter: brightness(0.95);
+}
+
 .categories {
   display: flex;
   flex-direction: column;
@@ -176,7 +226,7 @@
 
 .item {
   display: grid;
-  grid-template-columns: 20px 1fr auto;
+  grid-template-columns: 20px 1fr auto 22px;
   align-items: center;
   gap: 8px;
   padding: 7px 0;
@@ -261,6 +311,28 @@
   font-weight: 600;
   color: var(--color-primary);
   white-space: nowrap;
+}
+
+.removeBtn {
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.removeBtn:hover {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.itemActionPlaceholder {
+  width: 20px;
+  height: 20px;
 }
 
 .optionalInline {
