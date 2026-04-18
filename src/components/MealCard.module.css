@@ -17,6 +17,17 @@
 .card:hover {
   box-shadow: var(--shadow-hover);
   transform: translateY(-2px);
+
+@media (hover: none) {
+  .card:hover {
+    box-shadow: var(--shadow);
+    transform: none;
+  }
+  .card:active {
+    box-shadow: var(--shadow-hover);
+    transform: scale(0.98);
+  }
+}
 }
 
 .card:focus-visible {

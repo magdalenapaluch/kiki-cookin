@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { meals } from "./data/meals";
 import { MealCard } from "./components/MealCard";
 import { ShoppingList } from "./components/ShoppingList";
@@ -6,6 +6,7 @@ import "./App.css";
 
 function App() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [showList, setShowList] = useState(false);
 
   function toggleMeal(id: string) {
     setSelectedIds((prev) => {
@@ -19,6 +20,8 @@ function App() {
   function clearAll() {
     setSelectedIds(new Set());
   }
+
+  const closeList = useCallback(() => setShowList(false), []);
 
   const selectedMeals = meals.filter((m) => selectedIds.has(m.id));
 
@@ -52,8 +55,17 @@ function App() {
           </div>
         </section>
 
-        <ShoppingList selectedMeals={selectedMeals} />
+        <ShoppingList selectedMeals={selectedMeals} open={showList} onClose={closeList} />
       </main>
+
+      {selectedIds.size > 0 && (
+        <button className="list-fab" onClick={() => setShowList(true)} aria-label="View shopping list">
+          🛒
+          <span className="list-fab-badge">{selectedIds.size}</span>
+        </button>
+      )}
+
+      {showList && <div className="list-backdrop" onClick={closeList} />}
     </div>
   );
 }

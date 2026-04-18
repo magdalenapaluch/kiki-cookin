@@ -13,13 +13,18 @@ function IngredientName({ name }: { name: string }) {
 
 interface Props {
   selectedMeals: Meal[];
+  open?: boolean;
+  onClose?: () => void;
 }
 
-export function ShoppingList({ selectedMeals }: Props) {
+export function ShoppingList({ selectedMeals, open = false, onClose }: Props) {
   if (selectedMeals.length === 0) {
     return (
-      <aside className={styles.panel}>
-        <h2 className={styles.heading}>Shopping List</h2>
+      <aside className={`${styles.panel} ${open ? styles.panelOpen : ""}`}>
+        <div className={styles.headingRow}>
+          <h2 className={styles.heading}>Shopping List</h2>
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">✕</button>
+        </div>
         <div className={styles.empty}>
           <span className={styles.emptyIcon}>🛒</span>
           <p>Select meals to build your shopping list</p>
@@ -33,8 +38,11 @@ export function ShoppingList({ selectedMeals }: Props) {
   const optional = ingredients.filter((i) => i.optional);
 
   return (
-    <aside className={styles.panel}>
-      <h2 className={styles.heading}>Shopping List</h2>
+    <aside className={`${styles.panel} ${open ? styles.panelOpen : ""}`}>
+      <div className={styles.headingRow}>
+        <h2 className={styles.heading}>Shopping List</h2>
+        <button className={styles.closeBtn} onClick={onClose} aria-label="Close">✕</button>
+      </div>
 
       <div className={styles.mealTags}>
         {selectedMeals.map((m) => (

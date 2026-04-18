@@ -11,6 +11,62 @@
   scrollbar-color: var(--color-border) transparent;
 }
 
+/* ── Heading row (for close button alignment) ── */
+.headingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.closeBtn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.closeBtn:hover {
+  color: var(--color-text);
+  background: var(--color-border);
+}
+
+@media (max-width: 900px) {
+  .panel {
+    /* Bottom sheet: hidden below screen by default */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 80svh;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.18);
+    padding: 20px 20px 32px;
+    z-index: 300;
+    transform: translateY(110%);
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    /* hide when not open but keep in DOM so transitions work */
+    pointer-events: none;
+  }
+
+  .panel.panelOpen {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .closeBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .panel::-webkit-scrollbar {
   width: 6px;
 }
@@ -28,7 +84,6 @@
 .heading {
   font-size: 1.1rem;
   font-weight: 700;
-  margin-bottom: 16px;
   color: var(--color-text);
 }
 
