@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { type Meal, aggregateIngredients, formatQuantity, type CategoryKey, CATEGORY_ORDER, CATEGORY_LABELS, getIngredientCategory } from "../data/meals";
+import { createPortal } from "react-dom";
+import { type Meal, aggregateIngredients, formatQuantity, type CategoryKey, CATEGORY_ORDER, CATEGORY_LABELS, getIngredientCategory, shouldHideIngredient } from "../data/meals";
+import { getIngredientImageUrl } from "../data/ingredientImages";
 import styles from "./ShoppingList.module.css";
 
 function IngredientName({ name }: { name: string }) {
@@ -9,6 +11,14 @@ function IngredientName({ name }: { name: string }) {
     <>
       {match[1]} <span className={styles.translation}>{match[2]}</span>
     </>
+  );
+}
+
+function InfoIcon() {
+  return (
+    <span aria-hidden="true" className={styles.imageIconMark}>
+      ?
+    </span>
   );
 }
 
@@ -36,16 +46,26 @@ interface DisplayIngredient {
 
 const MEAL_COLORS = ["#f97316", "#8b5cf6", "#10b981", "#3b82f6", "#f43f5e", "#eab308", "#06b6d4", "#ec4899"];
 const CATEGORY_EMOJIS: Record<CategoryKey, string[]> = {
+  bakery: ["🥐"],
   produce: ["🥕"],
-  dairyEggs: ["🧀"],
-  meatFish: ["🥩"],
-  grainsBakery: ["🥐"],
-  cannedDry: ["🥫"],
-  spicesCondiments: ["🫙"],
+  canned: ["🥫"],
+  dryGoods: ["🍝"],
+  spices: ["🫙"],
+  meat: ["🥩"],
+  fridgeVeggies: ["🥒"],
+  coldCuts: ["🍖"],
+  cheese: ["🧀"],
+  dairyYogurt: ["🧈"],
+  milkEggsBaking: ["🥛"],
+  drinks: ["🧃"],
+  snacks: ["🍫"],
+  frozen: ["🧊"],
+  cosmetics: ["🧴"],
   other: ["😍"],
 };
 
 export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll }: Props) {
+  const LONG_PRESS_MS = 420;
   const [checkedItems, setCheckedItems] = useState<Set<string>>(() => {
     try {
       const saved = localStorage.getItem("shoppingListChecked");
@@ -66,6 +86,10 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
   });
   const [newItemName, setNewItemName] = useState("");
   const [focusedMealId, setFocusedMealId] = useState<string | null>(null);
+  const [heldIngredientKey, setHeldIngredientKey] = useState<string | null>(null);
+  const [previewImage, setPreviewImage] = useState<{ name: string; url: string } | null>(null);
+  const holdTimerRef = useRef<number | null>(null);
+  const holdTriggeredRef = useRef(false);
 
   const activeFocusedMealId = focusedMealId && selectedMeals.some((m) => m.id === focusedMealId) ? focusedMealId : null;
 
@@ -107,6 +131,30 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
     });
   };
 
+  const hasTextSelection = () => {
+    const selected = window.getSelection()?.toString() ?? "";
+    return selected.trim().length > 0;
+  };
+
+  const copyToClipboard = async (text: string) => {
+    const value = text.trim();
+    if (!value) return;
+
+    try {
+      await navigator.clipboard.writeText(value);
+    } catch {
+      const textarea = document.createElement("textarea");
+      textarea.value = value;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
+  };
+
   const addCustomItem = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const name = newItemName.trim();
@@ -142,6 +190,49 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
   };
 
   const mealColorMap = new Map<string, string>(selectedMeals.map((meal, i) => [meal.id, MEAL_COLORS[i % MEAL_COLORS.length]]));
+  const mealNameMap = new Map<string, string>(selectedMeals.map((meal) => [meal.id, meal.name]));
+
+  const clearHoldTimer = () => {
+    if (holdTimerRef.current !== null) {
+      window.clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+  };
+
+  const startHold = (ingredient: DisplayIngredient) => {
+    holdTriggeredRef.current = false;
+    clearHoldTimer();
+
+    holdTimerRef.current = window.setTimeout(() => {
+      holdTriggeredRef.current = true;
+      setHeldIngredientKey(ingredient.key);
+      void copyToClipboard(ingredient.name);
+    }, LONG_PRESS_MS);
+  };
+
+  const endHold = () => {
+    clearHoldTimer();
+    setHeldIngredientKey(null);
+  };
+
+  useEffect(() => {
+    return () => {
+      clearHoldTimer();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!previewImage) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setPreviewImage(null);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [previewImage]);
 
   const mealIngredients: DisplayIngredient[] = aggregateIngredients(selectedMeals).map((ing) => ({
     key: `meal__${ing.name.toLowerCase()}__${ing.unit}`,
@@ -159,7 +250,7 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
     optional: false,
     isCustom: true,
   }));
-  const ingredients: DisplayIngredient[] = [...mealIngredients, ...customIngredients];
+  const ingredients: DisplayIngredient[] = [...mealIngredients, ...customIngredients].filter((ing) => ing.isCustom || !shouldHideIngredient(ing.name));
 
   const byCategory = new Map<CategoryKey, DisplayIngredient[]>();
   for (const category of CATEGORY_ORDER) {
@@ -170,109 +261,167 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
     byCategory.get(category)?.push(ingredient);
   }
 
-  return (
-    <aside className={`${styles.panel} ${open ? styles.panelOpen : ""}`}>
-      <div className={styles.headingRow}>
-        <h2 className={styles.heading}>Shopping List</h2>
-        <div className={styles.headerButtons}>
-          {(selectedMeals.length > 0 || customItems.length > 0) && (
-            <button className={styles.clearBtn} onClick={handleClearAll} title="Clear all meals">
-              Clear
-            </button>
-          )}
-          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
-            ✕
-          </button>
-        </div>
-      </div>
-
-      {selectedMeals.length > 0 && (
-        <div className={styles.mealLegend}>
-          {selectedMeals.map((meal) => {
-            const color = mealColorMap.get(meal.id)!;
-            const isActive = activeFocusedMealId === meal.id;
-            return (
-              <button key={meal.id} className={`${styles.mealTag} ${isActive ? styles.mealTagActive : ""}`} style={{ "--tag-color": color } as React.CSSProperties} onClick={() => toggleFocusMeal(meal.id)} aria-pressed={isActive}>
-                {meal.name}
+  const imagePreviewModal =
+    previewImage && typeof document !== "undefined"
+      ? createPortal(
+          <div className={styles.imageModalBackdrop} role="dialog" aria-modal="true" aria-label={`Image preview for ${previewImage.name}`} onClick={() => setPreviewImage(null)}>
+            <div className={styles.imageModal} onClick={(e) => e.stopPropagation()}>
+              <button type="button" className={styles.imageModalClose} onClick={() => setPreviewImage(null)} aria-label="Close image preview">
+                ✕
               </button>
+              <img src={previewImage.url} alt={previewImage.name} className={styles.imageModalImage} />
+            </div>
+          </div>,
+          document.body,
+        )
+      : null;
+
+  return (
+    <>
+      <aside className={`${styles.panel} ${open ? styles.panelOpen : ""}`}>
+        <div className={styles.headingRow}>
+          <h2 className={styles.heading}>Shopping List</h2>
+          <div className={styles.headerButtons}>
+            {(selectedMeals.length > 0 || customItems.length > 0) && (
+              <button className={styles.clearBtn} onClick={handleClearAll} title="Clear all meals">
+                Clear
+              </button>
+            )}
+            <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        {selectedMeals.length > 0 && (
+          <div className={styles.mealLegend}>
+            {selectedMeals.map((meal) => {
+              const color = mealColorMap.get(meal.id)!;
+              const isActive = activeFocusedMealId === meal.id;
+              return (
+                <button key={meal.id} className={`${styles.mealTag} ${isActive ? styles.mealTagActive : ""}`} style={{ "--tag-color": color } as React.CSSProperties} onClick={() => toggleFocusMeal(meal.id)} aria-pressed={isActive}>
+                  {meal.name}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        <form className={styles.customForm} onSubmit={addCustomItem}>
+          <input className={styles.customName} placeholder="Add custom item" value={newItemName} onChange={(e) => setNewItemName(e.target.value)} aria-label="Custom item name" />
+          <button className={styles.customAddBtn} type="submit">
+            Add
+          </button>
+        </form>
+
+        {ingredients.length === 0 && (
+          <div className={styles.empty}>
+            <span className={styles.emptyIcon}>🛒</span>
+            <p>Select meals or add custom items</p>
+          </div>
+        )}
+
+        <div className={styles.categories}>
+          {CATEGORY_ORDER.map((category) => {
+            const items = byCategory.get(category) ?? [];
+            if (items.length === 0) return null;
+
+            return (
+              <section key={category} className={styles.categorySection}>
+                <h3 className={styles.categoryHeading}>
+                  <span className={styles.categoryEmojiRow} aria-hidden="true">
+                    <span className={styles.categoryEmoji}>{CATEGORY_EMOJIS[category][0]}</span>
+                  </span>
+                  <span className={styles.categoryLabel}>{CATEGORY_LABELS[category]}</span>
+                </h3>
+                <ul className={styles.list}>
+                  {items.map((ing, i) => {
+                    const isChecked = checkedItems.has(ing.key);
+                    const isHighlighted = activeFocusedMealId !== null && (ing.mealIds?.includes(activeFocusedMealId) ?? false);
+                    const isDimmed = activeFocusedMealId !== null && !isHighlighted && !ing.isCustom;
+                    const highlightColor = isHighlighted ? mealColorMap.get(activeFocusedMealId!) : undefined;
+                    const imageUrl = ing.isCustom ? undefined : getIngredientImageUrl(ing.name);
+                    const isHeld = heldIngredientKey === ing.key;
+                    const relatedMealNames = (ing.mealIds ?? []).map((mealId) => ({ id: mealId, name: mealNameMap.get(mealId), color: mealColorMap.get(mealId) })).filter((meal): meal is { id: string; name: string; color: string } => Boolean(meal.name && meal.color));
+                    return (
+                      <li key={`${category}-${ing.key}-${i}`} className={`${styles.item} ${ing.optional ? styles.optionalItem : ""} ${isChecked ? styles.checked : ""} ${isHighlighted ? styles.itemHighlighted : ""} ${isDimmed ? styles.itemDimmed : ""} ${isHeld ? styles.itemHeld : ""}`} style={isHighlighted ? ({ "--item-accent": highlightColor } as React.CSSProperties) : undefined}>
+                        <button className={styles.checkbox} onClick={() => toggleItem(ing.key)} aria-label={`Toggle ${ing.name}`} aria-pressed={isChecked}>
+                          {isChecked && "✓"}
+                        </button>
+                        <span
+                          className={styles.itemName}
+                          onClick={() => {
+                            if (hasTextSelection()) {
+                              return;
+                            }
+                            if (holdTriggeredRef.current) {
+                              holdTriggeredRef.current = false;
+                              return;
+                            }
+                            toggleItem(ing.key);
+                          }}
+                          onPointerDown={() => startHold(ing)}
+                          onPointerUp={endHold}
+                          onPointerLeave={endHold}
+                          onPointerCancel={endHold}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              toggleItem(ing.key);
+                            }
+                          }}
+                        >
+                          <span className={styles.itemLabel}>
+                            <IngredientName name={ing.name} />
+                            {imageUrl && (
+                              <button
+                                type="button"
+                                className={styles.imageIconBtn}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setPreviewImage({ name: ing.name, url: imageUrl });
+                                }}
+                                aria-label={`Open image for ${ing.name}`}
+                                title="Open product image"
+                              >
+                                <InfoIcon />
+                              </button>
+                            )}
+                            {ing.optional && <span className={styles.optionalInline}>optional</span>}
+                            {isHeld && relatedMealNames.length > 0 && (
+                              <span className={styles.holdMeals} role="status" aria-live="polite">
+                                {relatedMealNames.map((meal) => (
+                                  <span key={`${ing.key}-${meal.id}`} className={styles.holdMealChip} style={{ "--meal-chip-color": meal.color } as React.CSSProperties}>
+                                    {meal.name}
+                                  </span>
+                                ))}
+                              </span>
+                            )}
+                          </span>
+                        </span>
+                        {ing.isCustom ? (
+                          <button className={styles.removeBtn} onClick={() => removeCustomItem(ing.key.replace("custom__", ""))} aria-label={`Remove ${ing.name}`}>
+                            ✕
+                          </button>
+                        ) : (
+                          <span className={styles.itemQty}>
+                            {formatQuantity(ing.quantity)}
+                            {ing.unit && ` ${ing.unit}`}
+                          </span>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
             );
           })}
         </div>
-      )}
-
-      <form className={styles.customForm} onSubmit={addCustomItem}>
-        <input className={styles.customName} placeholder="Add custom item" value={newItemName} onChange={(e) => setNewItemName(e.target.value)} aria-label="Custom item name" />
-        <button className={styles.customAddBtn} type="submit">
-          Add
-        </button>
-      </form>
-
-      {ingredients.length === 0 && (
-        <div className={styles.empty}>
-          <span className={styles.emptyIcon}>🛒</span>
-          <p>Select meals or add custom items</p>
-        </div>
-      )}
-
-      <div className={styles.categories}>
-        {CATEGORY_ORDER.map((category) => {
-          const items = byCategory.get(category) ?? [];
-          if (items.length === 0) return null;
-
-          return (
-            <section key={category} className={styles.categorySection}>
-              <h3 className={styles.categoryHeading}>
-                <span className={styles.categoryEmojiRow} aria-hidden="true">
-                  <span className={styles.categoryEmoji}>{CATEGORY_EMOJIS[category][0]}</span>
-                </span>
-                <span className={styles.categoryLabel}>{CATEGORY_LABELS[category]}</span>
-              </h3>
-              <ul className={styles.list}>
-                {items.map((ing, i) => {
-                  const isChecked = checkedItems.has(ing.key);
-                  const isHighlighted = activeFocusedMealId !== null && (ing.mealIds?.includes(activeFocusedMealId) ?? false);
-                  const isDimmed = activeFocusedMealId !== null && !isHighlighted && !ing.isCustom;
-                  const highlightColor = isHighlighted ? mealColorMap.get(activeFocusedMealId!) : undefined;
-                  return (
-                    <li key={`${category}-${ing.key}-${i}`} className={`${styles.item} ${ing.optional ? styles.optionalItem : ""} ${isChecked ? styles.checked : ""} ${isHighlighted ? styles.itemHighlighted : ""} ${isDimmed ? styles.itemDimmed : ""}`} style={isHighlighted ? ({ "--item-accent": highlightColor } as React.CSSProperties) : undefined}>
-                      <button className={styles.checkbox} onClick={() => toggleItem(ing.key)} aria-label={`Toggle ${ing.name}`} aria-pressed={isChecked}>
-                        {isChecked && "✓"}
-                      </button>
-                      <span
-                        className={styles.itemName}
-                        onClick={() => toggleItem(ing.key)}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            toggleItem(ing.key);
-                          }
-                        }}
-                      >
-                        <span className={styles.itemLabel}>
-                          <IngredientName name={ing.name} />
-                          {ing.optional && <span className={styles.optionalInline}>optional</span>}
-                        </span>
-                      </span>
-                      {ing.isCustom ? (
-                        <button className={styles.removeBtn} onClick={() => removeCustomItem(ing.key.replace("custom__", ""))} aria-label={`Remove ${ing.name}`}>
-                          ✕
-                        </button>
-                      ) : (
-                        <span className={styles.itemQty}>
-                          {formatQuantity(ing.quantity)}
-                          {ing.unit && ` ${ing.unit}`}
-                        </span>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          );
-        })}
-      </div>
-    </aside>
+      </aside>
+      {imagePreviewModal}
+    </>
   );
 }

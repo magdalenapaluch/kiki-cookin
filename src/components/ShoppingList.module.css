@@ -318,6 +318,11 @@
   opacity: 0.28;
 }
 
+.item.itemHeld {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  border-radius: 6px;
+}
+
 .item:last-child {
   border-bottom: none;
 }
@@ -363,7 +368,7 @@
   display: block;
   min-width: 0;
   cursor: pointer;
-  user-select: none;
+  user-select: text;
   padding: 2px 0;
   margin: -2px 0;
   border-radius: 4px;
@@ -380,8 +385,166 @@
 }
 
 .itemLabel {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
   white-space: normal;
   overflow-wrap: anywhere;
+}
+
+.imageIconBtn {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  border-radius: 6px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 0.72rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    transform 0.14s ease,
+    border-color 0.16s ease,
+    background 0.16s ease,
+    color 0.16s ease;
+}
+
+.imageIconMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 1.2px solid currentColor;
+  font-size: 0.55rem;
+  font-weight: 700;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.imageIconBtn:hover {
+  color: var(--color-text);
+  border-color: color-mix(in srgb, var(--color-primary) 45%, var(--color-border));
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface));
+}
+
+.imageIconBtn:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+  outline-offset: 1px;
+}
+
+.imageIconBtn:active {
+  transform: translateY(1px) scale(0.95);
+}
+
+.imageModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 18, 28, 0.62);
+  z-index: 320;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0;
+  animation: imageBackdropIn 220ms ease-out;
+}
+
+.imageModal {
+  width: min(100vw, 720px);
+  max-height: 100svh;
+  background: var(--color-surface);
+  border-radius: 18px 18px 0 0;
+  overflow: hidden;
+  position: relative;
+  transform-origin: bottom center;
+  animation: imageModalIn 260ms cubic-bezier(0.2, 0.9, 0.24, 1);
+}
+
+.imageModalImage {
+  display: block;
+  width: 100%;
+  max-height: 86svh;
+  object-fit: contain;
+  background: #fff;
+  animation: imageContentIn 340ms ease-out;
+}
+
+.imageModalClose {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: rgba(0, 0, 0, 0.58);
+  color: #fff;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  font-size: 1rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+@keyframes imageBackdropIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes imageModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes imageContentIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.holdMeals {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.holdMealChip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 1px 7px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  line-height: 1.4;
+  border: 1px solid var(--meal-chip-color);
+  background: color-mix(in srgb, var(--meal-chip-color) 15%, transparent);
+  color: color-mix(in srgb, var(--meal-chip-color) 80%, #000);
+  white-space: nowrap;
 }
 
 .translation {
@@ -450,6 +613,7 @@
 
 @media (max-width: 640px) {
   .item {
+    grid-template-columns: 20px 1fr auto;
     gap: 10px;
     padding: 0 8px;
     font-size: 0.92rem;
@@ -474,6 +638,20 @@
   .removeBtn {
     width: 22px;
     height: 22px;
+  }
+
+  .imageIconBtn {
+    width: 22px;
+    height: 22px;
+  }
+
+  .imageModal {
+    width: 100vw;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .imageModalImage {
+    max-height: 84svh;
   }
 }
 
@@ -501,6 +679,22 @@
   .checkbox:hover {
     border-color: var(--color-border);
     background: var(--color-surface);
+  }
+
+  .imageIconBtn:active {
+    transform: scale(0.95);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .imageIconBtn {
+    transition: none;
+  }
+
+  .imageModalBackdrop,
+  .imageModal,
+  .imageModalImage {
+    animation: none;
   }
 
   .itemName:hover {

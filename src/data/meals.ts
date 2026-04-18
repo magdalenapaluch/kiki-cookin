@@ -70,197 +70,7 @@ export function formatQuantity(qty: number): string {
   return String(rounded);
 }
 
-// ━━ Category mapping for shopping list organization ━━
-export type CategoryKey = "produce" | "dairyEggs" | "meatFish" | "grainsBakery" | "cannedDry" | "spicesCondiments" | "other";
-
-export const CATEGORY_ORDER: CategoryKey[] = ["produce", "dairyEggs", "meatFish", "grainsBakery", "cannedDry", "spicesCondiments", "other"];
-
-export const CATEGORY_LABELS: Record<CategoryKey, string> = {
-  produce: "Veggies & Fruits",
-  dairyEggs: "Dairy & Eggs",
-  meatFish: "Meat",
-  grainsBakery: "Grains & Bakery",
-  cannedDry: "Canned & Dry Goods",
-  spicesCondiments: "Spices & Condiments",
-  other: "Other",
-};
-
-const POLISH_CHAR_MAP: Record<string, string> = {
-  ą: "a",
-  ć: "c",
-  ę: "e",
-  ł: "l",
-  ń: "n",
-  ó: "o",
-  ś: "s",
-  ź: "z",
-  ż: "z",
-  Ą: "a",
-  Ć: "c",
-  Ę: "e",
-  Ł: "l",
-  Ń: "n",
-  Ó: "o",
-  Ś: "s",
-  Ź: "z",
-  Ż: "z",
-};
-
-function normalizeForMatch(value: string): string {
-  return value
-    .replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, (character) => POLISH_CHAR_MAP[character] ?? character)
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\([^)]*\)/g, "")
-    .toLowerCase()
-    .trim();
-}
-
-function includesAny(text: string, candidates: string[]): boolean {
-  return candidates.some((candidate) => text.includes(candidate));
-}
-
-const SPICES_CONDIMENTS_KEYWORDS = ["prosz", "papryka mielona", "papryka slodka", "papryka wedzon", "pieprz", "cukier", "ocet", "kmin", "majeranek", "laurow", "sol", "cynamon", "oregano", "bazyli", "tymianek", "wanilinow", "curry", "kurkum", "chili", "imbir", "czosnek granul", "musztard", "spice", "season", "vinegar", "sugar", "salt", "pepper", "mustard", "cinnamon", "ginger", "turmeric", "garlic powder", "fuszer", "ecet", "bazsalikom", "kakukkf", "fah", "mustar", "orolt paprika", "edes paprika", "fustolt paprika"];
-
-const CANNED_DRY_KEYWORDS = ["puszce", "fasola", "dzem", "ryz", "passata", "sucha bulka", "woda", "kasz", "manna", "semolina", "cream of wheat", "dara", "buzadara", "soczew", "ciecierzyc", "groch", "quinoa", "nutella", "kuskus", "bulgur", "platki", "orzech", "pistac", "pestk", "nasion", "kakao", "canned", "beans", "jam", "rice", "water", "lentil", "chickpea", "pea", "oat", "flakes", "nuts", "nut", "seed", "seeds", "hazelnut", "almond", "pistach", "bab", "lekvar", "rizs", "lencs", "csicseri", "borso", "zab", "dio", "mandula", "pisztacia", "mag"];
-
-const PRODUCE_KEYWORDS = [
-  "cebul",
-  "papryk",
-  "pomidor",
-  "ziemniak",
-  "czosn",
-  "cukini",
-  "kukurydz",
-  "kapust",
-  "ogor",
-  "seler",
-  "owoc",
-  "owoce",
-  "jablk",
-  "banan",
-  "truskawk",
-  "malin",
-  "borowk",
-  "jagod",
-  "winogron",
-  "cytryn",
-  "limonk",
-  "pomarancz",
-  "gruszk",
-  "brzoskwin",
-  "kiwi",
-  "mango",
-  "salat",
-  "rukol",
-  "szpinak",
-  "por",
-  "brokul",
-  "kalafior",
-  "baklazan",
-  "rzodkiew",
-  "pieczark",
-  "pietruszk",
-  "koper",
-  "szczypior",
-  "onion",
-  "tomato",
-  "potato",
-  "garlic",
-  "zucchini",
-  "corn",
-  "cabbage",
-  "cucumber",
-  "celery",
-  "fruit",
-  "apple",
-  "strawberr",
-  "raspberr",
-  "blueberr",
-  "grape",
-  "lemon",
-  "lime",
-  "orange",
-  "pear",
-  "peach",
-  "lettuce",
-  "arugula",
-  "spinach",
-  "leek",
-  "broccoli",
-  "cauliflower",
-  "eggplant",
-  "radish",
-  "mushroom",
-  "parsley",
-  "dill",
-  "chive",
-  "hagyma",
-  "paradicsom",
-  "burgony",
-  "fokhagy",
-  "cukkini",
-  "kukorica",
-  "ubork",
-  "zeller",
-  "gyumolcs",
-  "alma",
-  "eper",
-  "szolo",
-  "citrom",
-  "narancs",
-  "korte",
-  "barack",
-  "salata",
-  "spenot",
-  "brokkoli",
-  "karfiol",
-  "retek",
-  "gomba",
-  "petrezs",
-  "kapor",
-  "sargarep",
-  "repa",
-  "ubi",
-  "marchew",
-  "carrot",
-];
-
-const DAIRY_EGGS_KEYWORDS = ["mleko", "jaj", "smietan", "jogurt", "ser", "twarog", "maslo", "tejszin", "smieta", "kefir", "mozzarella", "feta", "parmezan", "mascarpone", "milk", "egg", "cream", "yogurt", "cheese", "butter", "parmesan", "quark", "cottage cheese", "tej", "tojas", "sajt", "vaj", "tejfol", "turo", "drozdze", "yeast", "eleszto"];
-
-const MEAT_FISH_KEYWORDS = ["mieso", "kurczak", "boczek", "lopatka", "smalec", "bekon", "szynka", "kielbasa", "ryba", "losos", "dorsz", "tunczyk", "krewetk", "indyk", "wolow", "wieprzow", "cielec", "baran", "jagniec", "golec", "pasztet", "meat", "chicken", "bacon", "ham", "sausage", "fish", "salmon", "cod", "tuna", "shrimp", "turkey", "beef", "pork", "veal", "lamb", "pate", "hus", "csirke", "szalonna", "sonka", "kolbasz", "hal", "lazac", "tonhal", "garnel", "pulyka", "marha", "sertes", "borju", "bari"];
-
-const GRAINS_BAKERY_KEYWORDS = ["maka", "makaron", "bulk", "tortill", "pita", "ciast", "skrobia", "bread", "chleb", "bagiet", "buleczk", "tortellini", "gnocchi", "flour", "pasta", "bun", "dough", "starch", "pastry", "liszt", "teszta", "kenyer", "zsoml", "kelt"];
-
-export function getIngredientCategory(name: string): CategoryKey {
-  const n = normalizeForMatch(name);
-
-  if (includesAny(n, SPICES_CONDIMENTS_KEYWORDS)) {
-    return "spicesCondiments";
-  }
-
-  if (includesAny(n, CANNED_DRY_KEYWORDS)) {
-    return "cannedDry";
-  }
-
-  if (includesAny(n, PRODUCE_KEYWORDS)) {
-    return "produce";
-  }
-
-  if (includesAny(n, DAIRY_EGGS_KEYWORDS)) {
-    return "dairyEggs";
-  }
-
-  if (includesAny(n, MEAT_FISH_KEYWORDS)) {
-    return "meatFish";
-  }
-
-  if (includesAny(n, GRAINS_BAKERY_KEYWORDS)) {
-    return "grainsBakery";
-  }
-
-  return "other";
-}
+export { type CategoryKey, CATEGORY_ORDER, CATEGORY_LABELS, getIngredientCategory, shouldHideIngredient } from "./ingredientCategories";
 
 export const meals: Meal[] = [
   {
@@ -278,7 +88,7 @@ export const meals: Meal[] = [
       { name: "Pomidorki koktajlowe (cherry tomatoes)", quantity: 150, unit: "g" },
       { name: "Jajka (eggs)", quantity: 1, unit: "szt" },
       { name: "Śmietana (sour cream)", quantity: 250, unit: "ml" },
-      { name: "Boczek plastry (sliced bacon)", quantity: 1, unit: "op" },
+      { name: "Boczek (sliced bacon)", quantity: 1, unit: "op" },
     ],
   },
   {
@@ -289,7 +99,7 @@ export const meals: Meal[] = [
     recipeUrl: "https://www.mindmegette.hu/recept/paprikas-csirke-galuskaval",
     content: `Pokrój kurczaka na kawałki. Drobno posiekaj cebulę.\n\nRozgrzej olej w dużym garnku i smaż cebulę do przezroczystości. Dodaj paprykę w proszku i natychmiast zamieszaj. Dodaj kurczaka i przysmaż ze wszystkich stron.\n\nDodaj posiekaną paprykę i pomidora. Wlej szklankę wody i gotuj przez 20-25 minut aż kurczak będzie miękki.\n\nPrzygotuj kluski: wymieszaj mąkę, jajka i mleko na lepkie ciasto. Wrzucaj łyżkami do wrzątku osolonego i gotuj aż wypłyną, a następnie jeszcze 2-3 minuty.\n\nZmieszaj śmietanę z trochą ciepłego bujonu i dodaj do paprikaszu. Dopraw do smaku. Podaj z kluskami.`,
     ingredients: [
-      { name: "Kurczak (chicken)", quantity: 500, unit: "g" },
+      { name: "Piersi z kurczaka (chicken breasts)", quantity: 500, unit: "g" },
       { name: "Papryka (bell pepper)", quantity: 1, unit: "szt" },
       { name: "Pomidor (tomato)", quantity: 1, unit: "szt" },
       { name: "Papryka mielona (ground paprika)", quantity: 2, unit: "łyżeczka" },
@@ -354,7 +164,7 @@ export const meals: Meal[] = [
       { name: "Tortille (tortillas)", quantity: 1, unit: "op" },
       { name: "Ser żółty (yellow cheese)", quantity: 1, unit: "op", note: "tarty / grated" },
       { name: "Papryka (bell pepper)", quantity: 1, unit: "szt", optional: true },
-      { name: "Kukurydza w puszce (canned corn)", quantity: 1, unit: "szt", optional: true },
+      { name: "Kukurydza w puszce (corn)", quantity: 1, unit: "op", optional: true },
       { name: "Fasola Heinz w puszce (Heinz canned beans)", quantity: 1, unit: "szt" },
       { name: "Cebula (onion)", quantity: 2, unit: "szt" },
       { name: "Mięso mielone (ground meat)", quantity: 500, unit: "g" },
@@ -397,7 +207,7 @@ export const meals: Meal[] = [
     recipeUrl: "https://www.kwestiasmaku.com/przepis/tzatziki",
     content: `Na tzatziki: zetrzyj ogórek i wyciśnij nadmiar wilgoci. Drobno posiekaj czosnek.\n\nWymieszaj jogurt z tartym ogórkiem, posiekanym czoskiem, solą, pieprzem i świeżymi ziołami (koperkiem lub pietruszką). Schłodź co najmniej 1 godzinę.\n\nNa kurczaka: dopraw piersi z kurczaka solą, pieprzem, oreganem i sokiem z cytryny. Grill nad średnio wysokim ogniem przez 6-7 minut każdą stronę aż będzie gotowy. Odstaw na 5 minut, potem pokrój.\n\nRozgrzej chleb pita na grillu. Montuj rozmazując tzatziki na ciepłym pitcie, dodaj plasterki kurczaka, świeże pomidory, ogórek i czerwoną cebulę.`,
     ingredients: [
-      { name: "Jogurt naturalny (plain yogurt)", quantity: 400, unit: "ml" },
+      { name: "Jogurt grecki (greek yogurt)", quantity: 400, unit: "ml" },
       { name: "Czosnek (garlic)", quantity: 5, unit: "ząbki" },
       { name: "Pita bread", quantity: 1, unit: "op" },
       { name: "Piersi z kurczaka (chicken breasts)", quantity: 500, unit: "g" },
@@ -410,10 +220,10 @@ export const meals: Meal[] = [
     description: "Treściwy bigos siedmiogrodzki z wieprzowiną i kiszoną kapustą",
     imageUrl: "https://cdn.mindmegette.hu/2024/04/AmItR2xFasmFOyqrLsLbCPol76um4hVI7YN8TYqxWMM/fill/0/0/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50LzVhMTUzNmRjZWZmNDQ2ZGRhZmRiNWQwMThkNzkwZDMy.webp",
     recipeUrl: "https://www.mindmegette.hu/recept/szekelykaposzta",
-    content: `Mięso pokrój w kostkę. Cebulę drobno posiekaj, a czosnek przeciśnij przez praskę.\n\nW dużym garnku rozgrzej smalec i zeszklij cebulę. Dodaj czosnek i smaż jeszcze przez około 10 sekund. Wsyp paprykę mieloną, wlej odrobinę wody i smaż chwilę, aż przyprawy dobrze się połączą.\n\nDodaj mięso. Dopraw solą oraz kminkiem, następnie dorzuć pokrojoną paprykę i pomidora. Przykryj i duś na małym ogniu przez około 5 minut.\n\nKapustę kiszoną opłucz, odciśnij z nadmiaru płynu i dodaj do garnka. Wlej tyle wody, aby prawie przykryła całość, i gotuj dalej, aż mięso oraz kapusta będą miękkie.\n\nW osobnym naczyniu wymieszaj śmietanę z mąką. Dolej 100 ml zimnej wody oraz kilka łyżek płynu z gotowania i dokładnie rozprowadź, aby nie było grudek. Wlej zawiesinę do garnka, zagotuj i gotuj jeszcze przez 5 minut. Na końcu dopraw do smaku, jeśli trzeba.`,
+    content: `Mięso pokrój w kostkę. Cebulę drobno posiekaj, a czosnek przeciśnij przez praskę.\n\nW dużym garnku rozgrzej oliwę z oliwek i zeszklij cebulę. Dodaj czosnek i smaż jeszcze przez około 10 sekund. Wsyp paprykę mieloną, wlej odrobinę wody i smaż chwilę, aż przyprawy dobrze się połączą.\n\nDodaj mięso. Dopraw solą oraz kminkiem, następnie dorzuć pokrojoną paprykę i pomidora. Przykryj i duś na małym ogniu przez około 5 minut.\n\nKapustę kiszoną opłucz, odciśnij z nadmiaru płynu i dodaj do garnka. Wlej tyle wody, aby prawie przykryła całość, i gotuj dalej, aż mięso oraz kapusta będą miękkie.\n\nW osobnym naczyniu wymieszaj śmietanę z mąką. Dolej 100 ml zimnej wody oraz kilka łyżek płynu z gotowania i dokładnie rozprowadź, aby nie było grudek. Wlej zawiesinę do garnka, zagotuj i gotuj jeszcze przez 5 minut. Na końcu dopraw do smaku, jeśli trzeba.`,
     ingredients: [
       { name: "Łopatka wieprzowa (pork shoulder)", quantity: 700, unit: "g" },
-      { name: "Smalec (lard)", quantity: 50, unit: "g" },
+      { name: "Oliwa z oliwek (olive oil)", quantity: 50, unit: "g" },
       { name: "Czosnek (garlic)", quantity: 2, unit: "ząbki" },
       { name: "Cebula (onion)", quantity: 1, unit: "szt" },
       { name: "Papryka mielona (ground paprika)", quantity: 2, unit: "łyżeczka" },
@@ -433,10 +243,10 @@ export const meals: Meal[] = [
     imageUrl: "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/cynamonki-03.jpg",
     content: `Ciasto: do misy wsyp mąkę, drożdże instant, cukier i szczyptę soli. Wymieszaj. Dodaj letnie mleko oraz 2 jajka i zacznij wyrabiać ciasto na wolnych obrotach. Następnie, cały czas wyrabiając, dodawaj po kawałku miękkie masło (70 g).\n\nWyrabiaj ok. 15 minut, aż ciasto będzie gładkie i sprężyste. Przykryj ściereczką i odstaw na minimum 1 godzinę do wyrośnięcia w ciepłym miejscu.\n\nWyrośnięte ciasto przełóż na oprószony mąką blat, krótko zagnieć i podziel na 2 części. Każdą część rozwałkuj delikatnie na placek o wymiarach ok. 30 x 30 cm.\n\nNadzienie: placki posmaruj miękkim masłem (70 g), następnie posyp mieszanką cynamonu, cukru wanilinowego i cukru trzcinowego. Opcjonalnie dodaj skórkę startą z 1/2 cytryny.\n\nZwiń oba placki w roladki i pokrój każdą na 10 plasterków (ok. 2 cm). Ułóż bułeczki na blaszce wyłożonej papierem do pieczenia i odstaw na 15-20 minut do ponownego wyrośnięcia.\n\nPiekarnik nagrzej do 180°C. Wierzch bułeczek posmaruj roztrzepanym jajkiem i piecz ok. 20 minut, aż będą złote.\n\nW tej wersji pomijamy lukier i podajemy cynamonki bez polewy.`,
     ingredients: [
-      { name: "Mąka pszenna (wheat flour)", quantity: 250, unit: "g" },
-      { name: "Drożdże", quantity: 15, unit: "g" },
+      { name: "Mąka (flour)", quantity: 250, unit: "g" },
+      { name: "Drożdże (yeast)", quantity: 15, unit: "g" },
       { name: "Cukier (sugar)", quantity: 25, unit: "g" },
-      { name: "Sól (salt)", quantity: 1, unit: "szczypta" },
+      { name: "Sól (salt)", quantity: 5, unit: "g" },
       { name: "Mleko (milk)", quantity: 125, unit: "ml" },
       { name: "Jajka (eggs)", quantity: 1, unit: "szt" },
       { name: "Masło (butter)", quantity: 140, unit: "g" },
@@ -451,13 +261,13 @@ export const meals: Meal[] = [
     description: "Papryki faszerowane mięsem i ryżem w sosie pomidorowym",
     recipeUrl: "https://www.mindmegette.hu/recept/a-legfinomabb-toltott-paprika",
     imageUrl: "https://cdn.mindmegette.hu/2024/04/Yy6bop9pA-Pdkj7w67xf2jH4CWwPZORMrRxlzxDwrpA/fill/0/0/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50Lzc2ZTIzMzQ5MGI4ODRiYzk4NzI3NWYwYmFkZTM1Y2Rh.webp",
-    content: `Ryż ugotuj do połowy miękkości i odstaw.\n\nDrobno posiekaną cebulę i przeciśnięty czosnek zeszklij na 2 łyżkach smalcu. Zdejmij z ognia, dodaj mieloną paprykę i wymieszaj. Gdy masa lekko przestygnie, połącz ją z mięsem mielonym i podgotowanym ryżem. Dopraw solą oraz świeżo mielonym pieprzem.\n\nPapryki umyj, usuń gniazda nasienne i napełnij farszem.\n\nSos pomidorowy: posiekaną cebulę podsmaż na niewielkiej ilości tłuszczu. Dodaj cukier i mąkę, dokładnie wymieszaj, następnie wlej przecier pomidorowy i wodę, cały czas mieszając. Dodaj świeże liście selera, dopraw solą i pieprzem.\n\nDo gotującego się sosu włóż faszerowane papryki i gotuj na małym ogniu przez 30-40 minut, aż farsz całkowicie zmięknie.\n\nW razie potrzeby dolej trochę wody lub bulionu, jeśli sos zbyt mocno odparuje.`,
+    content: `Ryż ugotuj do połowy miękkości i odstaw.\n\nDrobno posiekaną cebulę i przeciśnięty czosnek zeszklij na 2 łyżkach oliwy z oliwek. Zdejmij z ognia, dodaj mieloną paprykę i wymieszaj. Gdy masa lekko przestygnie, połącz ją z mięsem mielonym i podgotowanym ryżem. Dopraw solą oraz świeżo mielonym pieprzem.\n\nPapryki umyj, usuń gniazda nasienne i napełnij farszem.\n\nSos pomidorowy: posiekaną cebulę podsmaż na niewielkiej ilości tłuszczu. Dodaj cukier i mąkę, dokładnie wymieszaj, następnie wlej przecier pomidorowy i wodę, cały czas mieszając. Dodaj świeże liście selera, dopraw solą i pieprzem.\n\nDo gotującego się sosu włóż faszerowane papryki i gotuj na małym ogniu przez 30-40 minut, aż farsz całkowicie zmięknie.\n\nW razie potrzeby dolej trochę wody lub bulionu, jeśli sos zbyt mocno odparuje.`,
     ingredients: [
       { name: "Ryż (rice)", quantity: 150, unit: "g" },
       { name: "Cebula (onion)", quantity: 2, unit: "szt" },
       { name: "Czosnek (garlic)", quantity: 1, unit: "ząbki" },
-      { name: "Smalec wieprzowy (pork lard)", quantity: 26, unit: "g", note: "do farszu" },
-      { name: "Smalec wieprzowy (pork lard)", quantity: 13, unit: "g", note: "do sosu" },
+      { name: "Oliwa z oliwek (olive oil)", quantity: 26, unit: "g", note: "do farszu" },
+      { name: "Oliwa z oliwek (olive oil)", quantity: 13, unit: "g", note: "do sosu" },
       { name: "Papryka mielona (ground paprika)", quantity: 1, unit: "łyżeczka" },
       { name: "Mięso mielone wieprzowe (ground pork)", quantity: 500, unit: "g" },
       { name: "Papryka do faszerowania (stuffing peppers)", quantity: 8, unit: "szt" },
@@ -466,6 +276,31 @@ export const meals: Meal[] = [
       { name: "Passata pomidorowa (tomato passata)", quantity: 1000, unit: "ml" },
       { name: "Woda (water)", quantity: 500, unit: "ml" },
       { name: "Liście selera (celery leaves)", quantity: 1, unit: "pęczek" },
+    ],
+  },
+  {
+    id: "pizza",
+    name: "Pizza",
+    description: "Pizza-style dough with mixed cheese and meat toppings",
+    recipeUrl: "https://wykop.pl/wpis/25705985/zauwazylem-ze-notorycznie-przycwszelakiego-rodzaju",
+    imageUrl: "https://kuchnialidla.pl/img/PL/1250x700/ca3b2921fd4b-b8808cab9e10-kw42-2023-lidl-pizza-neapolitanska-przepis-na-klasyczna-neapolitane.webp",
+    ingredients: [
+      { name: "Mąka 00 (00 flour)", quantity: 1000, unit: "g" },
+      { name: "Drożdże (yeast)", quantity: 5, unit: "g" },
+      { name: "Sól (salt)", quantity: 20, unit: "g" },
+      { name: "Woda (water)", quantity: 500, unit: "ml" },
+      { name: "Oliwa (olive oil)", quantity: 1, unit: "łyżka" },
+      { name: "Cebulki marynowane (pickled onions)", quantity: 1, unit: "op", optional: true },
+      { name: "Feta", quantity: 1, unit: "op", optional: true },
+      { name: "Kukurydza w puszce (corn)", quantity: 1, unit: "op", optional: true },
+      { name: "Mozzarella", quantity: 3, unit: "op" },
+      { name: "Salami", quantity: 1, unit: "op", optional: true },
+      { name: "Boczek (sliced bacon)", quantity: 1, unit: "op", optional: true },
+      { name: "Szynka (ham)", quantity: 1, unit: "op", optional: true },
+      { name: "Cebula (onion)", quantity: 1, unit: "szt", optional: true },
+      { name: "Ser żółty (yellow cheese)", quantity: 1, unit: "op", optional: true, note: "cheap cheese tarty / grated" },
+      { name: "Ser góralski (smoked cheese)", quantity: 1, unit: "op", optional: true },
+      { name: "Żurawina (cranberries)", quantity: 1, unit: "op", optional: true },
     ],
   },
 ];
