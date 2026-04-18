@@ -1,15 +1,6 @@
+import { Link } from "react-router-dom";
 import { type Meal } from "../data/meals";
 import styles from "./MealCard.module.css";
-
-function IngredientName({ name }: { name: string }) {
-  const match = name.match(/^(.+?)\s*(\(.+\))\s*$/);
-  if (!match) return <>{name}</>;
-  return (
-    <>
-      {match[1]} <span className={styles.translation}>{match[2]}</span>
-    </>
-  );
-}
 
 interface Props {
   meal: Meal;
@@ -31,30 +22,10 @@ export function MealCard({ meal, selected, onToggle }: Props) {
 
       <div className={styles.body}>
         <h2 className={styles.title}>{meal.name}</h2>
-        <p className={styles.description}>{meal.description}</p>
 
-        <details className={styles.details} onClick={(e) => e.stopPropagation()}>
-          <summary className={styles.detailsSummary}>{meal.ingredients.length} ingredients</summary>
-          <ul className={styles.ingredientList}>
-            {meal.ingredients.map((ing, i) => (
-              <li key={i} className={ing.optional ? styles.optional : ""}>
-                {ing.quantity > 0 && (
-                  <span className={styles.qty}>
-                    {Number.isInteger(ing.quantity) ? ing.quantity : ing.quantity}
-                    {ing.unit && ` ${ing.unit}`}
-                  </span>
-                )}{" "}
-                <IngredientName name={ing.name} />
-                {ing.note && <span className={styles.note}> ({ing.note})</span>}
-                {ing.optional && <span className={styles.optTag}> optional</span>}
-              </li>
-            ))}
-          </ul>
-        </details>
-
-        <a href={meal.recipeUrl} target="_blank" rel="noopener noreferrer" className={styles.recipeLink} onClick={(e) => e.stopPropagation()}>
-          View recipe ↗
-        </a>
+        <Link to={`/recipe/${meal.id}`} className={styles.recipeLink} onClick={(e) => e.stopPropagation()}>
+          Go to recipe ↗
+        </Link>
       </div>
 
       <div className={styles.selectBar}>

@@ -1,12 +1,27 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { meals } from "./data/meals";
-import { MealCard } from "./components/MealCard";
-import { ShoppingList } from "./components/ShoppingList";
+import { PageLayout } from "./components/PageLayout";
+import { MealGridSection } from "./components/MealGridSection";
+import { RecipeDetail } from "./components/RecipeDetail";
 import "./App.css";
 
 function App() {
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [showList, setShowList] = useState(false);
+  // Use lazy initializer to load from localStorage synchronously on first render
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(() => {
+    try {
+      const saved = localStorage.getItem("selectedMealIds");
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch (e) {
+      console.error("Failed to parse localStorage:", e);
+      return new Set();
+    }
+  });
+
+  // Save selected meals to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("selectedMealIds", JSON.stringify(Array.from(selectedIds)));
+  }, [selectedIds]);
 
   function toggleMeal(id: string) {
     setSelectedIds((prev) => {
@@ -21,52 +36,27 @@ function App() {
     setSelectedIds(new Set());
   }
 
-  const closeList = useCallback(() => setShowList(false), []);
-
-  const selectedMeals = meals.filter((m) => selectedIds.has(m.id));
-
   return (
-    <div className="app">
-      <header className="header">
-        <div className="header-inner">
-          <div className="logo">
-            <span className="logo-icon">🍳</span>
-            <span className="logo-text">Kiki Cookin'</span>
-          </div>
-          <p className="tagline">Pick your meals · get your shopping list</p>
-          {selectedIds.size > 0 && (
-            <button className="clear-btn" onClick={clearAll}>
-              Clear all ({selectedIds.size})
-            </button>
-          )}
-        </div>
-      </header>
-
-      <main className="main">
-        <section className="meal-section">
-          <h1 className="section-title">
-            Choose your meals
-            {selectedIds.size > 0 && <span className="badge">{selectedIds.size} selected</span>}
-          </h1>
-          <div className="meal-grid">
-            {meals.map((meal) => (
-              <MealCard key={meal.id} meal={meal} selected={selectedIds.has(meal.id)} onToggle={toggleMeal} />
-            ))}
-          </div>
-        </section>
-
-        <ShoppingList selectedMeals={selectedMeals} open={showList} onClose={closeList} />
-      </main>
-
-      {selectedIds.size > 0 && (
-        <button className="list-fab" onClick={() => setShowList(true)} aria-label="View shopping list">
-          🛒
-          <span className="list-fab-badge">{selectedIds.size}</span>
-        </button>
-      )}
-
-      {showList && <div className="list-backdrop" onClick={closeList} />}
-    </div>
+    <BrowserRouter basename="/kiki-cookin/">
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PageLayout selectedMealIds={selectedIds} onClearAllMeals={clearAll}>
+              <MealGridSection meals={meals} selectedIds={selectedIds} onToggleMeal={toggleMeal} />
+            </PageLayout>
+          }
+        />
+        <Route
+          path="/recipe/:mealId"
+          element={
+            <PageLayout selectedMealIds={selectedIds} onClearAllMeals={clearAll}>
+              <RecipeDetail />
+            </PageLayout>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

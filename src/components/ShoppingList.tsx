@@ -1,4 +1,5 @@
-import { type Meal, aggregateIngredients, formatQuantity } from "../data/meals";
+import { useState, useEffect } from "react";
+import { type Meal, aggregateIngredients, formatQuantity, type CategoryKey, CATEGORY_ORDER, CATEGORY_LABELS, getIngredientCategory } from "../data/meals";
 import styles from "./ShoppingList.module.css";
 
 function IngredientName({ name }: { name: string }) {
@@ -15,9 +16,41 @@ interface Props {
   selectedMeals: Meal[];
   open?: boolean;
   onClose?: () => void;
+  onClearAll?: () => void;
 }
 
-export function ShoppingList({ selectedMeals, open = false, onClose }: Props) {
+export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll }: Props) {
+  // Use lazy initializer to load from localStorage synchronously on first render
+  const [checkedItems, setCheckedItems] = useState<Set<string>>(() => {
+    try {
+      const saved = localStorage.getItem("shoppingListChecked");
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch (e) {
+      console.error("Failed to parse localStorage:", e);
+      return new Set();
+    }
+  });
+
+  // Save checked items to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("shoppingListChecked", JSON.stringify(Array.from(checkedItems)));
+  }, [checkedItems]);
+
+  const getItemKey = (name: string, unit: string) => `${name.toLowerCase()}__${unit}`;
+
+  const toggleItem = (name: string, unit: string) => {
+    const key = getItemKey(name, unit);
+    setCheckedItems((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  };
+
   if (selectedMeals.length === 0) {
     return (
       <aside className={`${styles.panel} ${open ? styles.panelOpen : ""}`}>
@@ -39,61 +72,81 @@ export function ShoppingList({ selectedMeals, open = false, onClose }: Props) {
   const required = ingredients.filter((i) => !i.optional);
   const optional = ingredients.filter((i) => i.optional);
 
+  const byCategory = new Map<CategoryKey, typeof ingredients>();
+  for (const category of CATEGORY_ORDER) {
+    byCategory.set(category, []);
+  }
+  for (const ingredient of ingredients) {
+    const category = getIngredientCategory(ingredient.name);
+    byCategory.get(category)?.push(ingredient);
+  }
+
   return (
     <aside className={`${styles.panel} ${open ? styles.panelOpen : ""}`}>
       <div className={styles.headingRow}>
         <h2 className={styles.heading}>Shopping List</h2>
-        <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
-          ✕
-        </button>
-      </div>
-
-      <div className={styles.mealTags}>
-        {selectedMeals.map((m) => (
-          <span key={m.id} className={styles.tag}>
-            {m.name}
-          </span>
-        ))}
+        <div className={styles.headerButtons}>
+          {selectedMeals.length > 0 && (
+            <button className={styles.clearBtn} onClick={onClearAll} title="Clear all meals">
+              Clear
+            </button>
+          )}
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
+            ✕
+          </button>
+        </div>
       </div>
 
       <p className={styles.count}>
         {required.length} items{optional.length > 0 ? ` + ${optional.length} optional` : ""}
       </p>
 
-      <ul className={styles.list}>
-        {required.map((ing, i) => (
-          <li key={i} className={styles.item}>
-            <span className={styles.checkbox} aria-hidden="true" />
-            <span className={styles.itemName}>
-              <IngredientName name={ing.name} />
-            </span>
-            <span className={styles.itemQty}>
-              {formatQuantity(ing.quantity)}
-              {ing.unit && ` ${ing.unit}`}
-            </span>
-          </li>
-        ))}
-      </ul>
+      <div className={styles.categories}>
+        {CATEGORY_ORDER.map((category) => {
+          const items = byCategory.get(category) ?? [];
+          if (items.length === 0) return null;
 
-      {optional.length > 0 && (
-        <>
-          <p className={styles.optionalHeader}>Optional / extras</p>
-          <ul className={`${styles.list} ${styles.optionalList}`}>
-            {optional.map((ing, i) => (
-              <li key={i} className={`${styles.item} ${styles.optionalItem}`}>
-                <span className={styles.checkbox} aria-hidden="true" />
-                <span className={styles.itemName}>
-                  <IngredientName name={ing.name} />
-                </span>
-                <span className={styles.itemQty}>
-                  {formatQuantity(ing.quantity)}
-                  {ing.unit && ` ${ing.unit}`}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+          return (
+            <section key={category} className={styles.categorySection}>
+              <h3 className={styles.categoryHeading}>{CATEGORY_LABELS[category]}</h3>
+              <ul className={styles.list}>
+                {items.map((ing, i) => {
+                  const itemKey = getItemKey(ing.name, ing.unit);
+                  const isChecked = checkedItems.has(itemKey);
+                  return (
+                    <li key={`${category}-${ing.name}-${i}`} className={`${styles.item} ${ing.optional ? styles.optionalItem : ""} ${isChecked ? styles.checked : ""}`}>
+                      <button className={styles.checkbox} onClick={() => toggleItem(ing.name, ing.unit)} aria-label={`Toggle ${ing.name}`} aria-pressed={isChecked}>
+                        {isChecked && "✓"}
+                      </button>
+                      <span
+                        className={styles.itemName}
+                        onClick={() => toggleItem(ing.name, ing.unit)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            toggleItem(ing.name, ing.unit);
+                          }
+                        }}
+                      >
+                        <span className={styles.itemLabel}>
+                          <IngredientName name={ing.name} />
+                          {ing.optional && <span className={styles.optionalInline}>optional</span>}
+                        </span>
+                      </span>
+                      <span className={styles.itemQty}>
+                        {formatQuantity(ing.quantity)}
+                        {ing.unit && ` ${ing.unit}`}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })}
+      </div>
     </aside>
   );
 }
