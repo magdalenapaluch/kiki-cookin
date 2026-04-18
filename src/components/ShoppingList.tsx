@@ -42,7 +42,7 @@ const CATEGORY_EMOJIS: Record<CategoryKey, string[]> = {
   grainsBakery: ["🥐"],
   cannedDry: ["🥫"],
   spicesCondiments: ["🫙"],
-  other: ["📦"],
+  other: ["😍"],
 };
 
 export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll }: Props) {

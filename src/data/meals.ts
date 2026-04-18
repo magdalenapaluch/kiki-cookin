@@ -122,7 +122,7 @@ function includesAny(text: string, candidates: string[]): boolean {
 
 const SPICES_CONDIMENTS_KEYWORDS = ["prosz", "papryka mielona", "papryka slodka", "papryka wedzon", "pieprz", "cukier", "ocet", "kmin", "majeranek", "laurow", "sol", "cynamon", "oregano", "bazyli", "tymianek", "wanilinow", "curry", "kurkum", "chili", "imbir", "czosnek granul", "musztard", "spice", "season", "vinegar", "sugar", "salt", "pepper", "mustard", "cinnamon", "ginger", "turmeric", "garlic powder", "fuszer", "ecet", "bazsalikom", "kakukkf", "fah", "mustar", "orolt paprika", "edes paprika", "fustolt paprika"];
 
-const CANNED_DRY_KEYWORDS = ["puszce", "fasola", "dzem", "ryz", "passata", "sucha bulka", "woda", "kasz", "soczew", "ciecierzyc", "groch", "quinoa", "nutella", "kuskus", "bulgur", "platki", "orzech", "pistac", "pestk", "nasion", "kakao", "canned", "beans", "jam", "rice", "water", "lentil", "chickpea", "pea", "oat", "flakes", "nuts", "nut", "seed", "seeds", "hazelnut", "almond", "pistach", "bab", "lekvar", "rizs", "lencs", "csicseri", "borso", "zab", "dio", "mandula", "pisztacia", "mag"];
+const CANNED_DRY_KEYWORDS = ["puszce", "fasola", "dzem", "ryz", "passata", "sucha bulka", "woda", "kasz", "manna", "semolina", "cream of wheat", "dara", "buzadara", "soczew", "ciecierzyc", "groch", "quinoa", "nutella", "kuskus", "bulgur", "platki", "orzech", "pistac", "pestk", "nasion", "kakao", "canned", "beans", "jam", "rice", "water", "lentil", "chickpea", "pea", "oat", "flakes", "nuts", "nut", "seed", "seeds", "hazelnut", "almond", "pistach", "bab", "lekvar", "rizs", "lencs", "csicseri", "borso", "zab", "dio", "mandula", "pisztacia", "mag"];
 
 const PRODUCE_KEYWORDS = [
   "cebul",
@@ -219,6 +219,11 @@ const PRODUCE_KEYWORDS = [
   "gomba",
   "petrezs",
   "kapor",
+  "sargarep",
+  "repa",
+  "ubi",
+  "marchew",
+  "carrot",
 ];
 
 const DAIRY_EGGS_KEYWORDS = ["mleko", "jaj", "smietan", "jogurt", "ser", "twarog", "maslo", "tejszin", "smieta", "kefir", "mozzarella", "feta", "parmezan", "mascarpone", "milk", "egg", "cream", "yogurt", "cheese", "butter", "parmesan", "quark", "cottage cheese", "tej", "tojas", "sajt", "vaj", "tejfol", "turo", "drozdze", "yeast", "eleszto"];
@@ -287,7 +292,7 @@ export const meals: Meal[] = [
       { name: "Kurczak (chicken)", quantity: 500, unit: "g" },
       { name: "Papryka (bell pepper)", quantity: 1, unit: "szt" },
       { name: "Pomidor (tomato)", quantity: 1, unit: "szt" },
-      { name: "Papryka w proszku (paprika powder)", quantity: 1, unit: "op" },
+      { name: "Papryka mielona (ground paprika)", quantity: 2, unit: "łyżeczka" },
       { name: "Cebula (onion)", quantity: 2, unit: "szt" },
       { name: "Mąka (flour)", quantity: 300, unit: "g" },
       { name: "Jajka (eggs)", quantity: 1, unit: "szt" },
@@ -402,16 +407,17 @@ export const meals: Meal[] = [
   {
     id: "bigos",
     name: "Transylvanian Bigos",
-    description: "Hearty Transylvanian pork & sauerkraut stew",
+    description: "Treściwy bigos siedmiogrodzki z wieprzowiną i kiszoną kapustą",
     imageUrl: "https://cdn.mindmegette.hu/2024/04/AmItR2xFasmFOyqrLsLbCPol76um4hVI7YN8TYqxWMM/fill/0/0/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50LzVhMTUzNmRjZWZmNDQ2ZGRhZmRiNWQwMThkNzkwZDMy.webp",
     recipeUrl: "https://www.mindmegette.hu/recept/szekelykaposzta",
-    content: `Cube the pork shoulder. Dice the onion and mince the garlic.\n\nHeat oil in a large pot and brown the meat on all sides. Remove and set aside.\n\nIn the same pot, cook diced onion until translucent. Add minced garlic and cook for another 30 seconds. Stir in paprika powder, add a splash of water, and cook gently stewing the spices.\n\nReturn the meat to the pot. Season with salt and caraway seeds, then add the bell peppers and tomato. Cover and simmer on low heat for 5 more minutes.\n\nRinse the sauerkraut and squeeze out excess liquid. Add it to the pot along with enough water to almost cover. Simmer gently until the meat and cabbage are very tender.\n\nMix sour cream with flour in a separate bowl to make a smooth paste. Dilute with 1 dl cold water and a little of the cooking broth until lump-free. Stir this mixture into the stew and simmer for another 5 minutes. Adjust seasoning if needed.`,
+    content: `Mięso pokrój w kostkę. Cebulę drobno posiekaj, a czosnek przeciśnij przez praskę.\n\nW dużym garnku rozgrzej smalec i zeszklij cebulę. Dodaj czosnek i smaż jeszcze przez około 10 sekund. Wsyp paprykę mieloną, wlej odrobinę wody i smaż chwilę, aż przyprawy dobrze się połączą.\n\nDodaj mięso. Dopraw solą oraz kminkiem, następnie dorzuć pokrojoną paprykę i pomidora. Przykryj i duś na małym ogniu przez około 5 minut.\n\nKapustę kiszoną opłucz, odciśnij z nadmiaru płynu i dodaj do garnka. Wlej tyle wody, aby prawie przykryła całość, i gotuj dalej, aż mięso oraz kapusta będą miękkie.\n\nW osobnym naczyniu wymieszaj śmietanę z mąką. Dolej 100 ml zimnej wody oraz kilka łyżek płynu z gotowania i dokładnie rozprowadź, aby nie było grudek. Wlej zawiesinę do garnka, zagotuj i gotuj jeszcze przez 5 minut. Na końcu dopraw do smaku, jeśli trzeba.`,
     ingredients: [
       { name: "Łopatka wieprzowa (pork shoulder)", quantity: 700, unit: "g" },
+      { name: "Smalec (lard)", quantity: 50, unit: "g" },
       { name: "Czosnek (garlic)", quantity: 2, unit: "ząbki" },
       { name: "Cebula (onion)", quantity: 1, unit: "szt" },
-      { name: "Kmin (caraway)", quantity: 1, unit: "łyżeczka" },
-      { name: "Pieprz (pepper)", quantity: 1, unit: "łyżka" },
+      { name: "Papryka mielona (ground paprika)", quantity: 2, unit: "łyżeczka" },
+      { name: "Kminek mielony (ground caraway)", quantity: 1, unit: "łyżeczka" },
       { name: "Papryka (bell pepper)", quantity: 2, unit: "szt" },
       { name: "Pomidor (tomato)", quantity: 1, unit: "szt" },
       { name: "Kapusta kiszona (sauerkraut)", quantity: 800, unit: "g" },

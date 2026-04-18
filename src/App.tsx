@@ -6,6 +6,8 @@ import { MealGridSection } from "./components/MealGridSection";
 import { RecipeDetail } from "./components/RecipeDetail";
 import "./App.css";
 
+const routerBase = import.meta.env.BASE_URL;
+
 function App() {
   // Use lazy initializer to load from localStorage synchronously on first render
   const [selectedIds, setSelectedIds] = useState<Set<string>>(() => {
@@ -37,7 +39,7 @@ function App() {
   }
 
   return (
-    <BrowserRouter basename="/kiki-cookin/">
+    <BrowserRouter basename={routerBase}>
       <Routes>
         <Route
           path="/"
