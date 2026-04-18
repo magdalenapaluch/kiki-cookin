@@ -109,95 +109,101 @@
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
 
-/* ── Mobile: FAB ── */
-.list-fab {
-  display: none;
-}
-
-@media (max-width: 900px) {
-  /* Header */
-  .logo-text {
-    font-size: 1.2rem;
-  }
-  .tagline {
+  /* ── Mobile: FAB ── */
+  .list-fab {
     display: none;
   }
-  .header-inner {
-    padding: 12px 16px;
+
+  @media (max-width: 900px) {
+    /* Header */
+    .logo-text {
+      font-size: 1.2rem;
+    }
+    .tagline {
+      display: none;
+    }
+    .header-inner {
+      padding: 12px 16px;
+    }
+
+    /* Main layout: single column, less padding */
+    .main {
+      padding: 16px;
+      gap: 16px;
+    }
+
+    /* Meal grid: 2 columns on tablet, 1 on phone handled below */
+    .meal-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    /* FAB: floating cart button */
+    .list-fab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: white;
+      font-size: 1.6rem;
+      border: none;
+      box-shadow: 0 4px 20px rgba(232, 98, 42, 0.45);
+      cursor: pointer;
+      z-index: 200;
+      transition:
+        transform 0.15s,
+        box-shadow 0.15s;
+    }
+
+    .list-fab:active {
+      transform: scale(0.92);
+    }
+
+    .list-fab-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: white;
+      color: var(--color-primary);
+      font-size: 0.7rem;
+      font-weight: 700;
+      font-family: inherit;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Backdrop */
+    .list-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 299;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
   }
 
-  /* Main layout: single column, less padding */
-  .main {
-    padding: 16px;
-    gap: 16px;
+  @media (max-width: 480px) {
+    .meal-grid {
+      grid-template-columns: 1fr;
+    }
   }
-
-  /* Meal grid: 2 columns on tablet, 1 on phone handled below */
-  .meal-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
-  }
-
-  /* FAB: floating cart button */
-  .list-fab {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    bottom: 24px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: var(--color-primary);
-    color: white;
-    font-size: 1.6rem;
-    border: none;
-    box-shadow: 0 4px 20px rgba(232, 98, 42, 0.45);
-    cursor: pointer;
-    z-index: 200;
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-
-  .list-fab:active {
-    transform: scale(0.92);
-  }
-
-  .list-fab-badge {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    background: white;
-    color: var(--color-primary);
-    font-size: 0.7rem;
-    font-weight: 700;
-    font-family: inherit;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Backdrop */
-  .list-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 299;
-    animation: fadeIn 0.2s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-}
-
-@media (max-width: 480px) {
-  .meal-grid {
-    grid-template-columns: 1fr;
-  }
-}
 }

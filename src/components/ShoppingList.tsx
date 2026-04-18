@@ -23,7 +23,9 @@ export function ShoppingList({ selectedMeals, open = false, onClose }: Props) {
       <aside className={`${styles.panel} ${open ? styles.panelOpen : ""}`}>
         <div className={styles.headingRow}>
           <h2 className={styles.heading}>Shopping List</h2>
-          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">✕</button>
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
+            ✕
+          </button>
         </div>
         <div className={styles.empty}>
           <span className={styles.emptyIcon}>🛒</span>
@@ -41,7 +43,9 @@ export function ShoppingList({ selectedMeals, open = false, onClose }: Props) {
     <aside className={`${styles.panel} ${open ? styles.panelOpen : ""}`}>
       <div className={styles.headingRow}>
         <h2 className={styles.heading}>Shopping List</h2>
-        <button className={styles.closeBtn} onClick={onClose} aria-label="Close">✕</button>
+        <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
+          ✕
+        </button>
       </div>
 
       <div className={styles.mealTags}>
