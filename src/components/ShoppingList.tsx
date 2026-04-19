@@ -90,6 +90,18 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
       return [];
     }
   });
+
+  // Track if the unremovable item is present
+  const UNREMOVABLE_ITEM_ID = "unremovable-miauka";
+  const UNREMOVABLE_ITEM: CustomItem = { id: UNREMOVABLE_ITEM_ID, name: "Sth nice for miauka" };
+
+  // Add unremovable item if basket was empty and a meal is added
+  useEffect(() => {
+    // Only add if there are meals, and no custom items, and the unremovable item is not present
+    if (selectedMeals.length === 1 && customItems.length === 0 && !customItems.some((item) => item.id === UNREMOVABLE_ITEM_ID)) {
+      setCustomItems((prev) => [UNREMOVABLE_ITEM, ...prev]);
+    }
+  }, [selectedMeals.length]);
   const [newItemName, setNewItemName] = useState("");
   const [focusedMealId, setFocusedMealId] = useState<string | null>(null);
   // const [heldIngredientKey, setHeldIngredientKey] = useState<string | null>(null); // removed: no longer used
@@ -154,6 +166,7 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
   };
 
   const removeCustomItem = (itemId: string) => {
+    if (itemId === UNREMOVABLE_ITEM_ID) return; // Prevent removal
     setCustomItems((prev) => prev.filter((item) => item.id !== itemId));
     setCheckedItems((prev) => {
       const next = new Set(prev);
@@ -235,7 +248,7 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
               <button type="button" className={styles.imageModalClose} onClick={() => setPreviewDetails(null)} aria-label="Close details">
                 ✕
               </button>
-              {previewDetails.imageUrl ? <img src={previewDetails.imageUrl} alt={previewDetails.name} className={styles.imageModalImage} /> : <div className={styles.imageModalNoImage}>No image available</div>}
+              {previewDetails.imageUrl && <img src={previewDetails.imageUrl} alt={previewDetails.name} className={styles.imageModalImage} />}
               <div className={styles.imageModalInfo}>
                 <h4 className={styles.imageModalTitle}>{previewDetails.name}</h4>
                 <p className={styles.imageModalMetaLabel}>Used in:</p>
@@ -351,9 +364,13 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
                           </span>
                         </span>
                         {ing.isCustom ? (
-                          <button className={styles.removeBtn} onClick={() => removeCustomItem(ing.key.replace("custom__", ""))} aria-label={`Remove ${ing.name}`}>
-                            ✕
-                          </button>
+                          ing.key === `custom__${UNREMOVABLE_ITEM_ID}` ? (
+                            <span style={{ width: 20, display: "inline-block" }} />
+                          ) : (
+                            <button className={styles.removeBtn} onClick={() => removeCustomItem(ing.key.replace("custom__", ""))} aria-label={`Remove ${ing.name}`}>
+                              ✕
+                            </button>
+                          )
                         ) : (
                           <span className={styles.itemQty}>
                             {formatQuantity(ing.quantity)}

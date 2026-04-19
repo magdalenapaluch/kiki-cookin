@@ -237,7 +237,7 @@ const PRODUCE_KEYWORDS = [
 ];
 
 // 12. Packaged snacks & sweets
-const SNACKS_KEYWORDS = ["chipsy", "crisps", "chips", "slodycze", "cukierki", "zelki", "guma do zucia", "batonik", "chrupk", "snack", "candy", "sweet", "csipsz", "edesseg", "cukorka", "gumicukor", "rago"];
+const SNACKS_KEYWORDS = ["chipsy", "crisps", "chips", "slodycze", "cukierki", "zelki", "guma do zucia", "batonik", "chrupk", "snack", "candy", "sweet", "csipsz", "edesseg", "cukorka", "gumicukor", "rago", "nice"];
 
 // 13. Bakery: bread, rolls, tortillas, pita, pastry; also coffee, tea, chocolate next to bread counter
 const BAKERY_KEYWORDS = ["chleb", "bulk", "pita", "tortill", "ciast", "bagiet", "buleczk", "grzank", "sucha bulk", "herbat", "kawa", "czekolad", "bread", "bun", "toast", "pastry", "croissant", "coffee", "tea", "chocolate", "kenyer", "zsoml", "kelt"];

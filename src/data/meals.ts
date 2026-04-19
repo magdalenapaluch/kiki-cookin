@@ -383,4 +383,20 @@ export const meals: Meal[] = [
       { name: "Jogurt naturalny (plain yogurt)", quantity: 200, unit: "ml", optional: true },
     ],
   },
+  {
+    id: "idea-snacks",
+    name: "Snacks",
+    description: "Quick and easy snack ideas",
+    imageUrl: "https://cablevey.com/wp-content/uploads/2020/11/The-Complete-Guide-on-Snack-Foods.jpg",
+    kind: "idea",
+    ingredients: [
+      { name: "Crisps (chips)", quantity: 1, unit: "op" },
+      { name: "Vegetable chips", quantity: 1, unit: "op" },
+      { name: "Jogurty (yogurts)", quantity: 2, unit: "szt" },
+      { name: "Sth sweet for miauka", quantity: 1, unit: "op" },
+      { name: "Marchew (carrots)", quantity: 3, unit: "szt" },
+      { name: "Nice fruits for miauka", quantity: 2, unit: "szt" },
+      { name: "Woda (water)", quantity: 6, unit: "szt" },
+    ],
+  },
 ];
