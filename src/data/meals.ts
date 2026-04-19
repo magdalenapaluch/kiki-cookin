@@ -371,6 +371,7 @@ export const meals: Meal[] = [
   {
     id: "idea-nalesniki",
     name: "Naleśniki",
+    kind: "idea",
     description: "Polish crepes with jam or sweetened quark",
     imageUrl: "https://images.unsplash.com/photo-1554520735-0a6b8b6ce8b7?w=480&q=80",
     content: `Przygotuj ciasto: wymieszaj mleko, jajka i mąkę na gładkie. Dopraw solą. Pozostaw na 20 minut.\n\nRozgrzej patelnię z powłoką i lekko ją pomaść. Wlej cienką warstwę ciasta i przechyl patelnię równomiernie. Smaż do złota, przewróć i smaż drugą stronę. Odłóż.\n\nJeśli dżem: rozłóż dżem na każdą naleśnik i zwijaj.\n\nJeśli twaróg: wymieszaj twaróg z cukrem i jogurtem na odpowiednią słodycz. Rozłóż na naleśnik i złóż.\n\nPodaj ciepłe, posypane cukrem pudrem, z dżemem lub śmietaną.`,
