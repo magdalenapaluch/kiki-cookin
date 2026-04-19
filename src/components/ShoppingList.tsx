@@ -71,7 +71,7 @@ const CATEGORY_EMOJIS: Record<CategoryKey, string[]> = {
 };
 
 export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll }: Props) {
-  const LONG_PRESS_MS = 420;
+  // const LONG_PRESS_MS = 420; // removed: no longer used
   const [checkedItems, setCheckedItems] = useState<Set<string>>(() => {
     try {
       const saved = localStorage.getItem("shoppingListChecked");
@@ -92,10 +92,10 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
   });
   const [newItemName, setNewItemName] = useState("");
   const [focusedMealId, setFocusedMealId] = useState<string | null>(null);
-  const [heldIngredientKey, setHeldIngredientKey] = useState<string | null>(null);
+  // const [heldIngredientKey, setHeldIngredientKey] = useState<string | null>(null); // removed: no longer used
   const [previewDetails, setPreviewDetails] = useState<PreviewDetails | null>(null);
   const holdTimerRef = useRef<number | null>(null);
-  const holdTriggeredRef = useRef(false);
+  // const holdTriggeredRef = useRef(false); // removed: no longer used
 
   const activeFocusedMealId = focusedMealId && selectedMeals.some((m) => m.id === focusedMealId) ? focusedMealId : null;
 
@@ -179,21 +179,6 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
       window.clearTimeout(holdTimerRef.current);
       holdTimerRef.current = null;
     }
-  };
-
-  const startHold = (ingredient: DisplayIngredient) => {
-    holdTriggeredRef.current = false;
-    clearHoldTimer();
-
-    holdTimerRef.current = window.setTimeout(() => {
-      holdTriggeredRef.current = true;
-      setHeldIngredientKey(ingredient.key);
-    }, LONG_PRESS_MS);
-  };
-
-  const endHold = () => {
-    clearHoldTimer();
-    setHeldIngredientKey(null);
   };
 
   useEffect(() => {
@@ -337,50 +322,31 @@ export function ShoppingList({ selectedMeals, open = false, onClose, onClearAll 
                     const isDimmed = activeFocusedMealId !== null && !isHighlighted && !ing.isCustom;
                     const highlightColor = isHighlighted ? mealColorMap.get(activeFocusedMealId!) : undefined;
                     const imageUrl = ing.isCustom ? undefined : getIngredientImageUrl(ing.name);
-                    const isHeld = heldIngredientKey === ing.key;
+                    // const isHeld = heldIngredientKey === ing.key; // removed: no longer used
                     const relatedMealNames = (ing.mealIds ?? []).map((mealId) => mealNameMap.get(mealId)).filter((name): name is string => Boolean(name));
                     return (
-                      <li key={`${category}-${ing.key}-${i}`} className={`${styles.item} ${ing.optional ? styles.optionalItem : ""} ${isChecked ? styles.checked : ""} ${isHighlighted ? styles.itemHighlighted : ""} ${isDimmed ? styles.itemDimmed : ""} ${isHeld ? styles.itemHeld : ""}`} style={isHighlighted ? ({ "--item-accent": highlightColor } as React.CSSProperties) : undefined}>
+                      <li key={`${category}-${ing.key}-${i}`} className={`${styles.item} ${ing.optional ? styles.optionalItem : ""} ${isChecked ? styles.checked : ""} ${isHighlighted ? styles.itemHighlighted : ""} ${isDimmed ? styles.itemDimmed : ""}`} style={isHighlighted ? ({ "--item-accent": highlightColor } as React.CSSProperties) : undefined}>
                         <button className={styles.checkbox} onClick={() => toggleItem(ing.key)} aria-label={`Toggle ${ing.name}`} aria-pressed={isChecked}>
                           {isChecked && "✓"}
                         </button>
-                        <span
-                          className={styles.itemName}
-                          onClick={() => {
-                            if (holdTriggeredRef.current) {
-                              holdTriggeredRef.current = false;
-                              return;
-                            }
-                            toggleItem(ing.key);
-                          }}
-                          onPointerDown={() => startHold(ing)}
-                          onPointerUp={endHold}
-                          onPointerLeave={endHold}
-                          onPointerCancel={endHold}
-                          role="button"
-                          tabIndex={0}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                              e.preventDefault();
-                              toggleItem(ing.key);
-                            }
-                          }}
-                        >
+                        <span className={styles.itemName}>
                           <span className={styles.itemLabel}>
                             <IngredientName name={ing.name} />
-                            <button
-                              type="button"
-                              className={styles.imageIconBtn}
-                              onPointerDown={(e) => e.stopPropagation()}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setPreviewDetails({ name: ing.name, imageUrl, mealNames: relatedMealNames });
-                              }}
-                              aria-label={`Open details for ${ing.name}`}
-                              title="Open ingredient details"
-                            >
-                              <InfoIcon />
-                            </button>
+                            {!ing.isCustom && (
+                              <button
+                                type="button"
+                                className={styles.imageIconBtn}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setPreviewDetails({ name: ing.name, imageUrl, mealNames: relatedMealNames });
+                                }}
+                                aria-label={`Open details for ${ing.name}`}
+                                title="Open ingredient details"
+                              >
+                                <InfoIcon />
+                              </button>
+                            )}
                             {ing.optional && <span className={styles.optionalInline}>optional</span>}
                           </span>
                         </span>

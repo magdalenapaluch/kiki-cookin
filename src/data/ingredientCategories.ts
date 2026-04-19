@@ -71,7 +71,7 @@ const FRIDGE_VEGGIES_KEYWORDS = ["kiszon", "kwaszon", "kielk", "kimchi", "fermen
 const FROZEN_KEYWORDS = ["mrozon", "frozen", "fagy", "fagyaszt", "pizza", "lody", "ice cream", "frytki", "fries"];
 
 // 3. Cosmetics & household — unlikely in meal ingredients but needed for manual list entries
-const COSMETICS_KEYWORDS = ["mydl", "szampon", "zebow", "prysznic", "prania", "worek", "folia opak", "folia spozyw", "folia alumi", "odswiezacz", "papier toalet", "soap", "shampoo", "toothpaste", "detergent", "cleanin", "szappan", "sampon", "fogkrem", "mososzer", "wc papir", "tisztito", "condoms", "skyn"];
+const COSMETICS_KEYWORDS = ["mydl", "szampon", "zebow", "prysznic", "prania", "worek", "folia opak", "folia spozyw", "folia alumi", "odswiezacz", "papier", "soap", "shampoo", "toothpaste", "detergent", "cleanin", "szappan", "sampon", "fogkrem", "mososzer", "tisztito", "condoms", "skyn"];
 
 // 4. Cold cuts & ham — checked before meat so "szynka" / "kiełbasa" don't land in Meat
 const COLD_CUTS_KEYWORDS = ["szynk", "kielbas", "parowk", "wedzin", "salami", "mortadel", "boczek", "bekon", "cold cut", "ham", "sausage", "sonka", "kolbasz", "szalonna"];
@@ -127,7 +127,7 @@ const SPICES_KEYWORDS = ["papryka mielon", "papryka slodka", "papryka wedzon", "
 const MILK_EGGS_BAKING_KEYWORDS = ["oliw", "mleko", "jajk", "jaj", "maka", "cukier", "dzem", "skrobia", "platki", "muesli", "musli", "granola", "proszek", "soda", "kakao", "wanili", "olej", "milk", "flour", "starch", "sugar", "cocoa", "vanilla", "oil", "tej", "tojas", "liszt", "cukor", "kemenyito", "vanilia", "zabpehely", "oliv"];
 
 // 9. Drinks & water
-const DRINKS_KEYWORDS = ["woda", "sok", "napoj", "piwo", "wino", "szampan", "juice", "beer", "wine", "water", "smoothie", "viz", "udito", "sor", "bor", "pezsgo"];
+const DRINKS_KEYWORDS = ["woda", "sok", "napoj", "piwo", "wino", "szampan", "juice", "beer", "wine", "water", "smoothie", "viz", "udito", "pezsgo"];
 
 // 10. Meat (whole cuts, poultry, fish)
 const MEAT_KEYWORDS = ["mieso", "kurczak", "lopatka", "wieprzow", "wolow", "cielec", "baran", "jagniec", "indyk", "ryb", "losos", "dorsz", "tunczyk", "krewetk", "golec", "pasztet", "meat", "chicken", "pork", "beef", "veal", "lamb", "turkey", "fish", "salmon", "cod", "tuna", "shrimp", "pate", "hus", "csirke", "marha", "sertes", "borju", "bari", "lazac", "tonhal", "garnel", "pulyka", "hal"];
